@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+import "phoenix/protobuf/decimal.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Tgs.GameInterface.WGFmGamingService.Protos";
+
+package gameinterfacewgfmgamingservice;
+
+// The greeting service definition.
+service GameInterfaceWGFmGamingService {
+  // Sends a greeting
+  rpc FundIn (FundRequest) returns (FundReply);
+  rpc FundStatus(FundStatusRequest) returns (FundStatusReply);
+  rpc FundOut (FundRequest) returns (FundReply);
+  rpc PlayerBalance (PlayerBalanceRequest) returns (PlayerBalanceReply);
+  rpc PlayerKickLine (PlayerKickLineRequest) returns (PlayerKickLineReply);
+  rpc GamePrepareLogin (GamePrepareLoginRequest) returns (GamePrepareLoginReply);
+  rpc GameLogin (GameLoginRequest) returns (GameLoginReply);
+  rpc GameHistory (GameHistoryRequest) returns (GameHistoryReply);
+}
+
+// The request message containing the user's name.
+message FundRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	string player_code = 5;
+	string order_id = 6;
+	phoenix.protobuf.DecimalValue amount = 7;
+}
+
+message FundStatusRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	string order_id = 5;
+}
+
+message PlayerBalanceRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	string player_code = 5;
+}
+
+message PlayerKickLineRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	string player_code = 5;
+}
+
+message GamePrepareLoginRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	string player_code = 5;
+	string currency_code= 6;
+}
+
+message GameLoginRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string token = 3;
+	string lang = 4;
+}
+
+message GameHistoryRequest {
+	string api_url = 1;
+	string partner_code = 2;
+	string partner_key = 3;
+	string partner_iv = 4;
+	bool is_settle = 5;
+	google.protobuf.Timestamp start_time = 6; 
+	google.protobuf.Timestamp end_time = 7;
+}
+
+// The response message containing the greetings.
+message FundReply {
+	bool success = 1;
+}
+
+message FundStatusReply {
+	bool success = 1;
+}
+
+message PlayerBalanceReply {
+	bool is_player = 1;
+	phoenix.protobuf.DecimalValue balance = 2;
+}
+
+message PlayerKickLineReply {
+	bool success = 1;
+}
+
+message GamePrepareLoginReply {
+	string token = 1;
+}
+
+message GameLoginReply {
+	string game_url = 1;
+}
+
+message GameHistoryReply {
+	repeated GameHistoryInfo items = 1;
+}
+
+message GameHistoryInfo {
+	string player_code = 1;
+	string external_round_id = 2;
+    string external_game_id = 3;
+	string external_created_on = 4;
+	string external_closed_on = 5;
+	bool is_closed = 6;
+	bool is_void = 7;
+	phoenix.protobuf.DecimalValue bet = 8;
+	phoenix.protobuf.DecimalValue valid_bet = 9;
+	phoenix.protobuf.DecimalValue player_winLoss = 10;
+	phoenix.protobuf.DecimalValue turnover = 11;
+	phoenix.protobuf.DecimalValue settle = 12;
+	string additional_data = 13;
+}
