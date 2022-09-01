@@ -6,7 +6,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddGameInterfaceSkywindServiceClient(
+    public static IServiceCollection AddGameInterfaceWGFmGamingServiceClient(
         this IServiceCollection services,
         Action<GameInterfaceWGFmGamingClientOptions, IServiceProvider> configure)
         => services
