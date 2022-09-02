@@ -69,6 +69,7 @@ message GameLoginRequest {
 	string partner_code = 2;
 	string token = 3;
 	string lang = 4;
+	int32 version = 5;
 }
 
 message GameHistoryRequest {

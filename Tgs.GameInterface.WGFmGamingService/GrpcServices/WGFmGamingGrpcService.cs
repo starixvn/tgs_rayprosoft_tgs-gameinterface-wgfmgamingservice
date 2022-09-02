@@ -166,7 +166,8 @@ namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
                 new(request.ApiUrl),
                 request.PartnerCode,
                 request.Token,
-                request.Lang);
+                request.Lang,
+                request.Version);
 
             var result = await _gameLoginService
                 .GetAsync(

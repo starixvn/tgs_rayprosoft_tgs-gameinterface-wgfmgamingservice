@@ -20,6 +20,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices
                     query.PartnerCode,
                     query.Token,
                     query.Lang,
+                    query.Version,
                     cancellationToken);
     }
 }

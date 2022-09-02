@@ -181,7 +181,8 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         ///             "apiUrl": "https://api.jsc080.net/",
         ///             "partnerCode": "TA",
         ///             "token": "{token}",
-        ///             "lang": "0"
+        ///             "lang": "0",
+        ///             "version": 2
         ///         }
         /// </remarks>
         [HttpPost("game/login")]
@@ -193,7 +194,8 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
                 source.ApiUrl,
                 source.PartnerCode,
                 source.Token,
-                source.Lang);
+                source.Lang,
+                source.Version);
 
             return service
                 .GetAsync(

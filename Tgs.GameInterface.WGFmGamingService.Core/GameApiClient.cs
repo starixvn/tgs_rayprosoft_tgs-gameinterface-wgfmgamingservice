@@ -275,6 +275,7 @@ internal class GameApiClient : IGameApiClient
         string partnerCode,
         string token,
         string lang,
+        int version = 1,
         CancellationToken cancellationToken = default)
     {
         var request = new Dictionary<string, object> {
@@ -284,10 +285,10 @@ internal class GameApiClient : IGameApiClient
             {"Token",WebUtility.UrlEncode(token)},
             {"PartnerCode",partnerCode},
             {"Lang",lang},
-            {"Version",2},
+            {"Version",version},
         };
 
-        var url = new Uri($"{apiUrl}?m=api&c=index&a=Login&Token={WebUtility.UrlEncode(token)}&PartnerCode={partnerCode}&Lang={lang}&Version=2");
+        var url = new Uri($"{apiUrl}?m=api&c=index&a=Login&Token={WebUtility.UrlEncode(token)}&PartnerCode={partnerCode}&Lang={lang}&Version={version}");
 
         var response = await GetAsync<LoginResponse>(
                         url,

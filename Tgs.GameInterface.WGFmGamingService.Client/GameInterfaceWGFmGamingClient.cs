@@ -137,6 +137,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
         string partnerCode,
         string token,
         string lang,
+        int version = 1,
         CancellationToken cancellationToken = default)
     {
         var request = new GameLoginRequest()
@@ -144,7 +145,8 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             ApiUrl = apiUrl.ToString(),
             PartnerCode = partnerCode,
             Token = token,
-            Lang = lang
+            Lang = lang,
+            Version = version
         };
 
         var reply = await _client
