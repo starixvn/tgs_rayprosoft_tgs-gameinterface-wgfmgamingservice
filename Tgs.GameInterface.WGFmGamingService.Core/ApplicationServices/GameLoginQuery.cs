@@ -4,4 +4,5 @@ public record GameLoginQuery(
     Uri ApiUrl,
     string PartnerCode,
     string Token,
-    string Lang);
+    string Lang,
+    int Version = 1);

@@ -12,4 +12,6 @@ public record GameLoginViewModel
     public string Token { get; init; } = default!;
     [Required]
     public string Lang { get; init; } = default!;
+
+    public int Version { get; init; } = 1;
 }

@@ -55,6 +55,7 @@ public interface IGameApiClient
         string partnerCode,
         string token,
         string lang,
+        int version = 1,
         CancellationToken cancellationToken = default);
 
     ValueTask<string> PrepareLoginAsync(
