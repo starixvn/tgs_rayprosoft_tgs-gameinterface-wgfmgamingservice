@@ -2,17 +2,17 @@
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
-internal class PlayerKickLineCommandService : ICommandService<PlayerKickLineCommand>
+internal class PlayerKickCommandService : ICommandService<PlayerKickCommand>
 {
     private readonly IGameApiClient _gameApiClient;
 
-    public PlayerKickLineCommandService(IGameApiClient gameApiClient)
+    public PlayerKickCommandService(IGameApiClient gameApiClient)
     {
         _gameApiClient = gameApiClient ?? throw new ArgumentNullException(nameof(gameApiClient));
     }
 
     public ValueTask ExecuteAsync(
-        PlayerKickLineCommand command,
+        PlayerKickCommand command,
         CancellationToken cancellationToken = default)
         => _gameApiClient
             .LogoutAsync(

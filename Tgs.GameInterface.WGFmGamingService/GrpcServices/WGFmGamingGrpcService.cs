@@ -14,7 +14,7 @@ namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
         private readonly IGetService<GameLoginQuery, Uri> _gameLoginService;
         private readonly IGetService<GamePrepareLoginQuery, string> _gamePrepareLoginService;
         private readonly IGetService<PlayerBalanceQuery, PlayerBalanceResult> _playerBalanceService;
-        private readonly ICommandService<PlayerKickLineCommand> _playerKickLineService;
+        private readonly ICommandService<PlayerKickCommand> _playerKickLineService;
 
         public WGFmGamingGrpcService(
             ICommandService<FundInCommand> fundInService,
@@ -24,7 +24,7 @@ namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
             IGetService<GameLoginQuery, Uri> gameLoginService,
             IGetService<GamePrepareLoginQuery, string> gamePrepareLoginService,
             IGetService<PlayerBalanceQuery, PlayerBalanceResult> playerBalanceService,
-            ICommandService<PlayerKickLineCommand> playerKickLineService
+            ICommandService<PlayerKickCommand> playerKickLineService
             )
         {
             _fundInService = fundInService ?? throw new ArgumentNullException(nameof(fundInService));
@@ -229,11 +229,11 @@ namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
             };
         }
 
-        public override async Task<PlayerKickLineReply> PlayerKickLine(
-            PlayerKickLineRequest request,
+        public override async Task<PlayerKickReply> PlayerKick(
+            PlayerKickRequest request,
             ServerCallContext context)
         {
-            var command = new PlayerKickLineCommand(
+            var command = new PlayerKickCommand(
                 new(request.ApiUrl),
                 request.PartnerCode,
                 request.PartnerKey,
@@ -246,7 +246,7 @@ namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
                     context.CancellationToken)
                 .ConfigureAwait(false);
 
-            return new PlayerKickLineReply()
+            return new PlayerKickReply()
             {
                 Success = true
             };

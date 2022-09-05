@@ -4,12 +4,12 @@ using Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesUnitTest;
 
 [TestClass]
-public class PlayerKickLineCommandServiceUnitTest
+public class PlayerKickommandServiceUnitTest
 {
     [TestMethod]
     public async Task Normal_Process()
     {
-        var command = new PlayerKickLineCommand(
+        var command = new PlayerKickCommand(
             new Uri("http://localhost:8088/"),
             "partnerCode",
             "partnerKey",
@@ -26,7 +26,7 @@ public class PlayerKickLineCommandServiceUnitTest
                     Arg.Is(command.PartnerIV),
                     Arg.Is(command.PlayerCode));
 
-        var service = new PlayerKickLineCommandService(
+        var service = new PlayerKickCommandService(
             fakeGameApiClient);
 
         await service

@@ -1,6 +1,6 @@
 ﻿namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
-public record PlayerKickLineCommand(
+public record PlayerKickCommand(
     Uri ApiUrl,
     string PartnerCode,
     string PartnerKey,

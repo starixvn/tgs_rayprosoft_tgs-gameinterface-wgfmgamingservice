@@ -212,7 +212,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
         return (reply.IsPlayer, reply.Balance);
     }
 
-    public async ValueTask PlayerKickLineAsync(
+    public async ValueTask PlayerKickAsync(
         Uri apiUrl,
         string partnerCode,
         string partnerKey,
@@ -220,7 +220,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
         string playerCode,
         CancellationToken cancellationToken = default)
     {
-        var request = new PlayerKickLineRequest()
+        var request = new PlayerKickRequest()
         {
             ApiUrl = apiUrl.ToString(),
             PartnerCode = partnerCode,
@@ -230,7 +230,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
         };
 
         _ = await _client
-            .PlayerKickLineAsync(
+            .PlayerKickAsync(
                 request: request,
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);

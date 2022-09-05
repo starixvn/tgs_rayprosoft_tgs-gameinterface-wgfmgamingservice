@@ -67,7 +67,7 @@ public interface IGameInterfaceWGFmGamingClient
         string playerCode,
         CancellationToken cancellationToken = default);
 
-    ValueTask PlayerKickLineAsync(
+    ValueTask PlayerKickAsync(
         Uri apiUrl,
         string partnerCode,
         string partnerKey,

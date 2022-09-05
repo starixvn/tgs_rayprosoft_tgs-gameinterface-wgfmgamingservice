@@ -14,7 +14,7 @@ service GameInterfaceWGFmGamingService {
   rpc FundStatus(FundStatusRequest) returns (FundStatusReply);
   rpc FundOut (FundRequest) returns (FundReply);
   rpc PlayerBalance (PlayerBalanceRequest) returns (PlayerBalanceReply);
-  rpc PlayerKickLine (PlayerKickLineRequest) returns (PlayerKickLineReply);
+  rpc PlayerKick (PlayerKickRequest) returns (PlayerKickReply);
   rpc GamePrepareLogin (GamePrepareLoginRequest) returns (GamePrepareLoginReply);
   rpc GameLogin (GameLoginRequest) returns (GameLoginReply);
   rpc GameHistory (GameHistoryRequest) returns (GameHistoryReply);
@@ -47,7 +47,7 @@ message PlayerBalanceRequest {
 	string player_code = 5;
 }
 
-message PlayerKickLineRequest {
+message PlayerKickRequest {
 	string api_url = 1;
 	string partner_code = 2;
 	string partner_key = 3;
@@ -96,7 +96,7 @@ message PlayerBalanceReply {
 	phoenix.protobuf.DecimalValue balance = 2;
 }
 
-message PlayerKickLineReply {
+message PlayerKickReply {
 	bool success = 1;
 }
 

@@ -261,12 +261,12 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         ///             "playerCode": "4ucmqplxb029"
         ///         }
         /// </remarks>
-        [HttpPost("player/kickline")]
-        public ValueTask PlayerKickLineAsync(
-            [FromServices] ICommandService<PlayerKickLineCommand> service,
-            PlayerKickLineModel source)
+        [HttpPost("player/kick")]
+        public ValueTask PlayerKickAsync(
+            [FromServices] ICommandService<PlayerKickCommand> service,
+            PlayerKickModel source)
         {
-            var command = new PlayerKickLineCommand(
+            var command = new PlayerKickCommand(
                 source.ApiUrl,
                 source.PartnerCode,
                 source.PartnerKey,

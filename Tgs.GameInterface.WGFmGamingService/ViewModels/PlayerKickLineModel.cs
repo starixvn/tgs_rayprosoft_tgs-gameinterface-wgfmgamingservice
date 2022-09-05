@@ -2,7 +2,7 @@
 
 namespace Tgs.GameInterface.WGFmGamingService.ViewModels;
 
-public record PlayerKickLineModel
+public record PlayerKickModel
 {
     [Required]
     public Uri ApiUrl { get; init; } = default!;
