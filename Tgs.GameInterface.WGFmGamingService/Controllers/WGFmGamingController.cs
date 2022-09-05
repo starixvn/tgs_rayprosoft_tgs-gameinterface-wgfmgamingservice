@@ -243,7 +243,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         }
 
         /// <summary>
-        /// Players the kick line asynchronous.
+        /// Players the kick asynchronous.
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="source">The source.</param>
