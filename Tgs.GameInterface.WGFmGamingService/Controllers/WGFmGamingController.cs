@@ -14,6 +14,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="source">The source.</param>
+        /// <returns></returns>
         /// <remarks>
         /// <b>Example</b><br />
         ///
@@ -54,6 +55,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="source">The source.</param>
+        /// <returns></returns>
         /// <remarks>
         /// <b>Example</b><br />
         ///
@@ -94,6 +96,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="source">The source.</param>
+        /// <returns></returns>
         /// <remarks>
         /// <b>Example</b><br />
         ///
@@ -130,6 +133,7 @@ namespace Tgs.GameInterface.WGFmGamingService.Controllers
         /// </summary>
         /// <param name="service">The service.</param>
         /// <param name="source">The source.</param>
+        /// <returns></returns>
         /// <remarks>
         /// <b>Example</b><br />
         ///
