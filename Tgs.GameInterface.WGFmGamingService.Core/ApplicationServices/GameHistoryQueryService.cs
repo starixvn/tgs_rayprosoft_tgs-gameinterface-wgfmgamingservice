@@ -9,13 +9,15 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices
     {
         private readonly ILogger<GameHistoryQueryService> _logger;
         private readonly IGameApiClient _client;
+        private readonly TimeZoneInfo _timeZone;
 
         public GameHistoryQueryService(
-             ILogger<GameHistoryQueryService> logger,
+            ILogger<GameHistoryQueryService> logger,
             IGameApiClient client)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
+            _timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
         }
 
         public async IAsyncEnumerable<GameHistoryResult> QueryAsync(
@@ -39,8 +41,6 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices
                 yield break;
             }
 
-            var cuiabaTime = TimeZoneInfo.FindSystemTimeZoneById("Central Brazilian Standard Time");//(UTC-04:00) Cuiaba
-
             foreach (var showBetInfo in showBetInfos)
             {
                 if (showBetInfo.Reference.Contains("不接受", StringComparison.OrdinalIgnoreCase)
@@ -55,8 +55,8 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices
                 var turnover = !isClosed || isVoid ? 0 : bet;
                 playerWinLoss = !isClosed || isVoid ? 0 : playerWinLoss;
                 var settle = !isClosed || isVoid ? 0 : bet + playerWinLoss;
-                var externalCreatedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), cuiabaTime.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
-                var externalClosedOn = (isClosed) ? new DateTimeOffset(DateTime.Parse(showBetInfo.SettleDate), cuiabaTime.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O") : string.Empty;
+                var externalCreatedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
+                var externalClosedOn = (isClosed) ? new DateTimeOffset(DateTime.Parse(showBetInfo.SettleDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O") : string.Empty;
                 yield return new GameHistoryResult(
                     PlayerCode: showBetInfo.Username,
                     ExternalRoundId: showBetInfo.Reference,

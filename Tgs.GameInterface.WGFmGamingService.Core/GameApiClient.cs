@@ -12,6 +12,7 @@ internal class GameApiClient : IGameApiClient
     private readonly HttpClient _client;
     private readonly IAesCryptography _aesCryptography;
     private readonly ILogger<GameApiClient> _logger;
+    private readonly TimeZoneInfo _timeZone;
 
     public GameApiClient(
         ILogger<GameApiClient> logger,
@@ -21,6 +22,7 @@ internal class GameApiClient : IGameApiClient
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _aesCryptography = aesCryptography ?? throw new ArgumentNullException(nameof(aesCryptography));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
     }
 
     public async ValueTask AccessMoneyWithdrawalAsync(
@@ -227,12 +229,10 @@ internal class GameApiClient : IGameApiClient
         DateTimeOffset endTime,
         CancellationToken cancellationToken = default)
     {
-        var cuiabaTime = TimeZoneInfo.FindSystemTimeZoneById("Central Brazilian Standard Time");//(UTC-04:00) Cuiaba
+        var startTimeEastern = TimeZoneInfo.ConvertTime(startTime.ToUniversalTime(), _timeZone);
+        var endTimeEastern = TimeZoneInfo.ConvertTime(endTime.ToUniversalTime(), _timeZone);
 
-        startTime = TimeZoneInfo.ConvertTimeFromUtc(startTime.UtcDateTime, cuiabaTime);
-        endTime = TimeZoneInfo.ConvertTimeFromUtc(endTime.UtcDateTime, cuiabaTime);
-
-        var data = $"|{dateType.Description()}|{startTime:yyyy-MM-dd HH:mm:ss}|{endTime:yyyy-MM-dd HH:mm:ss}";
+        var data = $"|{dateType.Description()}|{startTimeEastern:yyyy-MM-dd HH:mm:ss}|{endTimeEastern:yyyy-MM-dd HH:mm:ss}";
 
         var dataEncrypt = await _aesCryptography
                                 .GetAesEncryptAsync(

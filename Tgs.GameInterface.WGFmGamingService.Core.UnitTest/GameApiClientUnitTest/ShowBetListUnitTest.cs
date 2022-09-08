@@ -24,11 +24,12 @@ public class ShowBetListUnitTest
         var fakeAesCryptography = Substitute.For<IAesCryptography>();
 
         var dataEncrypt = Guid.NewGuid().ToString("N");
-        var cuiabaTime = TimeZoneInfo.FindSystemTimeZoneById("Central Brazilian Standard Time");//(UTC-04:00) Cuiaba
 
-        var startTimeUtc4 = TimeZoneInfo.ConvertTimeFromUtc(startTime.UtcDateTime, cuiabaTime);
-        var endTimeUtc4 = TimeZoneInfo.ConvertTimeFromUtc(endTime.UtcDateTime, cuiabaTime);
-        var data = $"|{dateType.Description()}|{startTimeUtc4:yyyy-MM-dd HH:mm:ss}|{endTimeUtc4:yyyy-MM-dd HH:mm:ss}";
+        var timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
+        var startTimeEastern = TimeZoneInfo.ConvertTime(startTime.ToUniversalTime(), timeZone);
+        var endTimeEastern = TimeZoneInfo.ConvertTime(endTime.ToUniversalTime(), timeZone);
+
+        var data = $"|{dateType.Description()}|{startTimeEastern:yyyy-MM-dd HH:mm:ss}|{endTimeEastern:yyyy-MM-dd HH:mm:ss}";
 
         _ = fakeAesCryptography.GetAesEncryptAsync(
             Arg.Is(data),
