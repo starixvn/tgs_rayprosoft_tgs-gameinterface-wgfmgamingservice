@@ -418,17 +418,20 @@ internal class GameApiClient : IGameApiClient
         var sw = Stopwatch.StartNew();
 
         var httpResponseMessage = await _client
-                                        .GetAsync(
-                                            url,
-                                            cancellationToken)
-                                        .ConfigureAwait(false);
+            .GetAsync(
+                requestUri: url,
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         sw.Stop();
 
         var responseMessage = default(string);
         using (var sr = new StreamReader(httpResponseMessage.Content.ReadAsStreamAsync(cancellationToken).Result))
         {
-            responseMessage = await sr.ReadToEndAsync() ?? string.Empty;
+            responseMessage = await sr
+                .ReadToEndAsync(
+                    cancellationToken: cancellationToken)
+                ?? string.Empty;
         }
 
         var logEvent = new GameApiLogEvent

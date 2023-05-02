@@ -56,7 +56,13 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices
                 playerWinLoss = !isClosed || isVoid ? 0 : playerWinLoss;
                 var settle = !isClosed || isVoid ? 0 : bet + playerWinLoss;
                 var externalCreatedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
-                var externalClosedOn = (isClosed) ? new DateTimeOffset(DateTime.Parse(showBetInfo.SettleDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O") : string.Empty;
+                var externalClosedOn = (isClosed) ? new DateTimeOffset(DateTime.Parse(showBetInfo.SettleDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.SettleDate))).ToString("O") : string.Empty;
+
+                if (!isClosed && isVoid)
+                {
+                    externalClosedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
+                    isClosed = true;
+                }
                 yield return new GameHistoryResult(
                     PlayerCode: showBetInfo.Username,
                     ExternalRoundId: showBetInfo.Reference,

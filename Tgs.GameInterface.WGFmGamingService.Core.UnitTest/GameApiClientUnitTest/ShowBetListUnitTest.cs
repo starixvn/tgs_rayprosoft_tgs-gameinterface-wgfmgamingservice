@@ -391,4 +391,102 @@ public class ShowBetListUnitTest
 
         Assert.IsNotNull(actual);
     }
+
+    [TestMethod]
+    public async Task Normal_Process_Void()
+    {
+        var apiUrl = new Uri("http://localhost:8088/");
+        var partnerCode = "partnerCode";
+        var partnerKey = "partnerKey";
+        var partnerIV = "partnerIV";
+        var dateType = ShowBetListDateType.SettleDate;
+        var startTime = DateTimeOffset.Parse("2023-04-26 21:00:00+08:00");
+        var endTime = DateTimeOffset.Parse("2023-04-26 21:30:00+08:00");
+
+        var fakeAesCryptography = Substitute.For<IAesCryptography>();
+
+        var dataEncrypt = Guid.NewGuid().ToString("N");
+        var cuiabaTime = TimeZoneInfo.FindSystemTimeZoneById("Central Brazilian Standard Time");//(UTC-04:00) Cuiaba
+
+        var startTimeUtc4 = TimeZoneInfo.ConvertTimeFromUtc(startTime.UtcDateTime, cuiabaTime);
+        var endTimeUtc4 = TimeZoneInfo.ConvertTimeFromUtc(endTime.UtcDateTime, cuiabaTime);
+        var data = $"|{dateType.Description()}|{startTimeUtc4:yyyy-MM-dd HH:mm:ss}|{endTimeUtc4:yyyy-MM-dd HH:mm:ss}";
+
+        _ = fakeAesCryptography.GetAesEncryptAsync(
+            Arg.Is(data),
+            Arg.Is(partnerKey),
+            Arg.Is(partnerIV)).Returns(dataEncrypt);
+
+        var url = new Uri($"{apiUrl}?m=api&c=index&a=ShowBetList&Hash={dataEncrypt}&PartnerCode={partnerCode}");
+
+        var response = new ShowBetListResponse()
+        {
+            ReturnCode = 1,
+            Total = "1",
+            TotalActiveAmount = "0",
+            TotalAmount = "0",
+            TotalResult = "0",
+            BetInfo = new ShowBetInfo[] {
+                new ShowBetInfo() {
+                    MemberId ="59640",
+                    Username= "4uiw4uixe35k",
+                    RecordDate ="2023-04-26 21:14:21",
+                    Reference = "6042636087",
+                    SportType ="足球",
+                    BetType ="(滚球)上半场大 / 小",
+                    MatchName ="萨尔瓦多甲组联赛",
+                    HomeName ="圣特克拉",
+                    AwayName ="德拉贡",
+                    BetContent = "萨尔瓦多甲组联赛<br>圣特克拉  VS  德拉贡 <br>1:0 1.5 / 2 大盘 @&nbsp; 1.050",
+                    BetAmount ="1,523.00",
+                    BetStatus = "<br><span style='color: red'>已拒绝</span>",
+                    Result = "<span style='color: red'>已拒绝</span>",
+                    ActiveAmount ="0.00",
+                    ResultScore ="",
+                    SettleDate="",
+                    BetIp ="124.217.189.154",
+                    InitData = new ShowBetInfoInitData()
+                    {
+                        FB= "1",
+                        Type= "live_halftime_highlow",
+                        Content= "high@1.05@1.75@1:0",
+                        Valid= "1",
+                        LiveStatus= "1",
+                        PlanNo= "1",
+                        Part= "0",
+                        Win= "0",
+                        OddsType= string.Empty,
+                        MatchDate= "2023-04-26 21:00:00",
+                        BetAmount="1,523.00"
+                    }
+                }
+            }
+        };
+        var content = JsonSerializer.Serialize(response);
+        var handler = new MockHttpMessageHandler();
+        _ = handler.Expect(HttpMethod.Get, url.ToString())
+                            .Respond(HttpStatusCode.OK, new StringContent(content));
+
+        var fakeHttpClient = handler.ToHttpClient();
+        var fakeLog = NullLogger<GameApiClient>.Instance;
+
+        var client = new GameApiClient(
+            fakeLog,
+            fakeHttpClient,
+            fakeAesCryptography);
+
+        var actual = await client.ShowBetListAsync(
+            apiUrl,
+            partnerCode,
+            partnerKey,
+            partnerIV,
+            dateType,
+            startTime,
+            endTime
+            ).ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.AreEqual("<br><span style='color: red'>已拒绝</span>", actual.Single().BetStatus);
+        Assert.AreEqual("<span style='color: red'>已拒绝</span>", actual.Single().Result);
+    }
 }

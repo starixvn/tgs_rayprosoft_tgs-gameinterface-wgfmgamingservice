@@ -371,4 +371,81 @@ public class GameHistoryQueryServiceUnitTest
         Assert.IsNotNull(actual);
         Assert.IsFalse(actual.Any());
     }
+
+    [TestMethod]
+    public async Task Normal_Process_SettleDate_Void()
+    {
+        var query = new GameHistoryQuery(
+            new Uri("http://localhost:8088/"),
+            "partnerCode",
+            "partnerKey",
+            "partnerIV",
+            true,
+            DateTimeOffset.Parse("2023-04-26 21:00:00+08:00"),
+            DateTimeOffset.Parse("2023-04-26 21:30:00+08:00"));
+        var fakeLog = NullLogger<GameHistoryQueryService>.Instance;
+        var fakeGameApiClient = Substitute.For<IGameApiClient>();
+
+        var showBetInfos = new ShowBetInfo[] {
+                new ShowBetInfo() {
+                    MemberId ="59640",
+                    Username= "4uiw4uixe35k",
+                    RecordDate ="2023-04-26 21:14:21",
+                    Reference = "6042636087",
+                    SportType ="足球",
+                    BetType ="(滚球)上半场大 / 小",
+                    MatchName ="萨尔瓦多甲组联赛",
+                    HomeName ="圣特克拉",
+                    AwayName ="德拉贡",
+                    BetContent = "萨尔瓦多甲组联赛<br>圣特克拉  VS  德拉贡 <br>1:0 1.5 / 2 大盘 @&nbsp; 1.050",
+                    BetAmount ="1,523.00",
+                    BetStatus = "<br><span style='color: red'>已拒绝</span>",
+                    Result = "<span style='color: red'>已拒绝</span>",
+                    ActiveAmount ="0.00",
+                    ResultScore ="",
+                    SettleDate="",
+                    BetIp ="124.217.189.154",
+                    InitData = new ShowBetInfoInitData()
+                    {
+                        FB= "1",
+                        Type= "live_halftime_highlow",
+                        Content= "high@1.05@1.75@1:0",
+                        Valid= "1",
+                        LiveStatus= "1",
+                        PlanNo= "1",
+                        Part= "0",
+                        Win= "0",
+                        OddsType= string.Empty,
+                        MatchDate= "2023-04-26 21:00:00",
+                        BetAmount="1,523.00"
+                    }
+                }
+            };
+
+        _ = fakeGameApiClient
+                .ShowBetListAsync(
+                    Arg.Is(query.ApiUrl),
+                    Arg.Is(query.PartnerCode),
+                    Arg.Is(query.PartnerKey),
+                    Arg.Is(query.PartnerIV),
+                    Arg.Is(ShowBetListDateType.SettleDate),
+                    Arg.Is(query.StartTime),
+                    Arg.Is(query.EndTime))
+                .Returns(showBetInfos);
+
+        var service = new GameHistoryQueryService(
+            fakeLog,
+            fakeGameApiClient);
+
+        var actual = await service
+            .QueryAsync(
+                query)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        Assert.IsNotNull(actual);
+        Assert.IsTrue(actual.Single().IsClosed);
+        Assert.IsTrue(actual.Single().IsVoid);
+        Assert.AreEqual(DateTimeOffset.Parse("2023-04-26 21:14:21-04:00").ToString("O"), actual.Single().ExternalClosedOn);
+    }
 }
