@@ -3,253 +3,265 @@ using Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 using Tgs.GameInterface.WGFmGamingService.Protos;
 using Tgs.ServiceUtility;
 
-namespace Tgs.GameInterface.WGFmGamingService.GrpcServices
+namespace Tgs.GameInterface.WGFmGamingService.GrpcServices;
+
+public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceBase
 {
-    public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceBase
+    private readonly ILogger<WGFmGamingGrpcService> _logger;
+    private readonly ICommandService<FundInCommand> _fundInService;
+    private readonly ICommandService<FundOutCommand> _fundOutService;
+    private readonly IGetService<FundStatusQuery, bool> _fundStatusService;
+    private readonly IQueryService<GameHistoryQuery, GameHistoryResult> _gameHistoryService;
+    private readonly IGetService<GameLoginQuery, Uri> _gameLoginService;
+    private readonly IGetService<GamePrepareLoginQuery, string> _gamePrepareLoginService;
+    private readonly IGetService<PlayerBalanceQuery, PlayerBalanceResult> _playerBalanceService;
+    private readonly ICommandService<PlayerKickCommand> _playerKickLineService;
+
+    public WGFmGamingGrpcService(
+        ILogger<WGFmGamingGrpcService> logger,
+        ICommandService<FundInCommand> fundInService,
+        ICommandService<FundOutCommand> fundOutService,
+        IGetService<FundStatusQuery, bool> fundStatusService,
+        IQueryService<GameHistoryQuery, GameHistoryResult> gameHistoryService,
+        IGetService<GameLoginQuery, Uri> gameLoginService,
+        IGetService<GamePrepareLoginQuery, string> gamePrepareLoginService,
+        IGetService<PlayerBalanceQuery, PlayerBalanceResult> playerBalanceService,
+        ICommandService<PlayerKickCommand> playerKickLineService
+        )
     {
-        private readonly ICommandService<FundInCommand> _fundInService;
-        private readonly ICommandService<FundOutCommand> _fundOutService;
-        private readonly IGetService<FundStatusQuery, bool> _fundStatusService;
-        private readonly IQueryService<GameHistoryQuery, GameHistoryResult> _gameHistoryService;
-        private readonly IGetService<GameLoginQuery, Uri> _gameLoginService;
-        private readonly IGetService<GamePrepareLoginQuery, string> _gamePrepareLoginService;
-        private readonly IGetService<PlayerBalanceQuery, PlayerBalanceResult> _playerBalanceService;
-        private readonly ICommandService<PlayerKickCommand> _playerKickLineService;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _fundInService = fundInService ?? throw new ArgumentNullException(nameof(fundInService));
+        _fundOutService = fundOutService ?? throw new ArgumentNullException(nameof(fundOutService));
+        _fundStatusService = fundStatusService ?? throw new ArgumentNullException(nameof(fundStatusService));
+        _gameHistoryService = gameHistoryService ?? throw new ArgumentNullException(nameof(gameHistoryService));
+        _gameLoginService = gameLoginService ?? throw new ArgumentNullException(nameof(gameLoginService));
+        _gamePrepareLoginService = gamePrepareLoginService ?? throw new ArgumentNullException(nameof(gamePrepareLoginService));
+        _playerBalanceService = playerBalanceService ?? throw new ArgumentNullException(nameof(playerBalanceService));
+        _playerKickLineService = playerKickLineService ?? throw new ArgumentNullException(nameof(playerKickLineService));
+    }
 
-        public WGFmGamingGrpcService(
-            ICommandService<FundInCommand> fundInService,
-            ICommandService<FundOutCommand> fundOutService,
-            IGetService<FundStatusQuery, bool> fundStatusService,
-            IQueryService<GameHistoryQuery, GameHistoryResult> gameHistoryService,
-            IGetService<GameLoginQuery, Uri> gameLoginService,
-            IGetService<GamePrepareLoginQuery, string> gamePrepareLoginService,
-            IGetService<PlayerBalanceQuery, PlayerBalanceResult> playerBalanceService,
-            ICommandService<PlayerKickCommand> playerKickLineService
-            )
+    public override Task<CheckingServiceReply> CheckingService(CheckingServiceRequest request, ServerCallContext context)
+    {
+        _logger.LogWarning("LogOn:{logOn} Message: Create a check connection.({machineName})", DateTime.Now.ToString("o"), request.MachineName);
+
+        return Task.FromResult(new CheckingServiceReply
         {
-            _fundInService = fundInService ?? throw new ArgumentNullException(nameof(fundInService));
-            _fundOutService = fundOutService ?? throw new ArgumentNullException(nameof(fundOutService));
-            _fundStatusService = fundStatusService ?? throw new ArgumentNullException(nameof(fundStatusService));
-            _gameHistoryService = gameHistoryService ?? throw new ArgumentNullException(nameof(gameHistoryService));
-            _gameLoginService = gameLoginService ?? throw new ArgumentNullException(nameof(gameLoginService));
-            _gamePrepareLoginService = gamePrepareLoginService ?? throw new ArgumentNullException(nameof(gamePrepareLoginService));
-            _playerBalanceService = playerBalanceService ?? throw new ArgumentNullException(nameof(playerBalanceService));
-            _playerKickLineService = playerKickLineService ?? throw new ArgumentNullException(nameof(playerKickLineService));
-        }
+            MachineName = Environment.MachineName
+        });
+    }
 
-        public override async Task<FundReply> FundIn(
-            FundRequest request,
-            ServerCallContext context)
+    public override async Task<FundReply> FundIn(
+        FundRequest request,
+        ServerCallContext context)
+    {
+        var command = new FundInCommand(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.PlayerCode,
+            request.OrderId,
+            request.Amount.ToDecimal()!.Value);
+
+        await _fundInService
+             .ExecuteAsync(
+                 command,
+                 context.CancellationToken)
+             .ConfigureAwait(false);
+
+        return new FundReply
         {
-            var command = new FundInCommand(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.PlayerCode,
-                request.OrderId,
-                request.Amount.ToDecimal()!.Value);
+            Success = true
+        };
+    }
 
-            await _fundInService
-                 .ExecuteAsync(
-                     command,
-                     context.CancellationToken)
-                 .ConfigureAwait(false);
+    public override async Task<FundReply> FundOut(
+        FundRequest request,
+        ServerCallContext context)
+    {
+        var command = new FundOutCommand(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.PlayerCode,
+            request.OrderId,
+            request.Amount.ToDecimal()!.Value);
 
-            return new FundReply
+        await _fundOutService
+             .ExecuteAsync(
+                 command,
+                 context.CancellationToken)
+             .ConfigureAwait(false);
+
+        return new FundReply
+        {
+            Success = true
+        };
+    }
+
+    public override async Task<FundStatusReply> FundStatus(
+        FundStatusRequest request,
+        ServerCallContext context)
+    {
+        var query = new FundStatusQuery(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.OrderId);
+
+        var result = await _fundStatusService
+            .GetAsync(
+                query,
+                context.CancellationToken)
+            .ConfigureAwait(false);
+
+        return new FundStatusReply()
+        {
+            Success = result
+        };
+    }
+
+    public override async Task<GameHistoryReply> GameHistory(
+        GameHistoryRequest request,
+        ServerCallContext context)
+    {
+        var query = new GameHistoryQuery(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.IsSettle,
+            request.StartTime.ToDateTimeOffset(),
+            request.EndTime.ToDateTimeOffset());
+
+        var results = await _gameHistoryService
+            .QueryAsync(
+                query,
+                context.CancellationToken)
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+
+        var reply = new GameHistoryReply();
+
+        if (results.Any())
+        {
+            foreach (var result in results)
             {
-                Success = true
-            };
-        }
-
-        public override async Task<FundReply> FundOut(
-            FundRequest request,
-            ServerCallContext context)
-        {
-            var command = new FundOutCommand(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.PlayerCode,
-                request.OrderId,
-                request.Amount.ToDecimal()!.Value);
-
-            await _fundOutService
-                 .ExecuteAsync(
-                     command,
-                     context.CancellationToken)
-                 .ConfigureAwait(false);
-
-            return new FundReply
-            {
-                Success = true
-            };
-        }
-
-        public override async Task<FundStatusReply> FundStatus(
-            FundStatusRequest request,
-            ServerCallContext context)
-        {
-            var query = new FundStatusQuery(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.OrderId);
-
-            var result = await _fundStatusService
-                .GetAsync(
-                    query,
-                    context.CancellationToken)
-                .ConfigureAwait(false);
-
-            return new FundStatusReply()
-            {
-                Success = result
-            };
-        }
-
-        public override async Task<GameHistoryReply> GameHistory(
-            GameHistoryRequest request,
-            ServerCallContext context)
-        {
-            var query = new GameHistoryQuery(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.IsSettle,
-                request.StartTime.ToDateTimeOffset(),
-                request.EndTime.ToDateTimeOffset());
-
-            var results = await _gameHistoryService
-                .QueryAsync(
-                    query,
-                    context.CancellationToken)
-                .ToArrayAsync()
-                .ConfigureAwait(false);
-
-            var reply = new GameHistoryReply();
-
-            if (results.Any())
-            {
-                foreach (var result in results)
+                reply.Items.Add(new GameHistoryInfo()
                 {
-                    reply.Items.Add(new GameHistoryInfo()
-                    {
-                        PlayerCode = result.PlayerCode,
-                        ExternalRoundId = result.ExternalRoundId,
-                        ExternalGameId = result.ExternalGameId,
-                        ExternalCreatedOn = result.ExternalCreatedOn,
-                        ExternalClosedOn = result.ExternalClosedOn,
-                        IsClosed = result.IsClosed,
-                        IsVoid = result.IsVoid,
-                        Bet = result.Bet,
-                        ValidBet = result.ValidBet,
-                        PlayerWinLoss = result.PlayerWinLoss,
-                        Turnover = result.Turnover,
-                        Settle = result.Settle,
-                        AdditionalData = result.AdditionalData
-                    });
-                }
+                    PlayerCode = result.PlayerCode,
+                    ExternalRoundId = result.ExternalRoundId,
+                    ExternalGameId = result.ExternalGameId,
+                    ExternalCreatedOn = result.ExternalCreatedOn,
+                    ExternalClosedOn = result.ExternalClosedOn,
+                    IsClosed = result.IsClosed,
+                    IsVoid = result.IsVoid,
+                    Bet = result.Bet,
+                    ValidBet = result.ValidBet,
+                    PlayerWinLoss = result.PlayerWinLoss,
+                    Turnover = result.Turnover,
+                    Settle = result.Settle,
+                    AdditionalData = result.AdditionalData
+                });
             }
-
-            return reply;
         }
 
-        public override async Task<GameLoginReply> GameLogin(
-            GameLoginRequest request,
-            ServerCallContext context)
+        return reply;
+    }
+
+    public override async Task<GameLoginReply> GameLogin(
+        GameLoginRequest request,
+        ServerCallContext context)
+    {
+        var query = new GameLoginQuery(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.Token,
+            request.Lang,
+            request.Version);
+
+        var result = await _gameLoginService
+            .GetAsync(
+                query,
+                context.CancellationToken)
+            .ConfigureAwait(false);
+
+        return new GameLoginReply()
         {
-            var query = new GameLoginQuery(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.Token,
-                request.Lang,
-                request.Version);
+            GameUrl = result.ToString()
+        };
+    }
 
-            var result = await _gameLoginService
-                .GetAsync(
-                    query,
-                    context.CancellationToken)
-                .ConfigureAwait(false);
+    public override async Task<GamePrepareLoginReply> GamePrepareLogin(
+        GamePrepareLoginRequest request,
+        ServerCallContext context)
+    {
+        var query = new GamePrepareLoginQuery(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.PlayerCode,
+            request.CurrencyCode);
 
-            return new GameLoginReply()
-            {
-                GameUrl = result.ToString()
-            };
-        }
+        var result = await _gamePrepareLoginService
+            .GetAsync(
+                query,
+                context.CancellationToken)
+            .ConfigureAwait(false);
 
-        public override async Task<GamePrepareLoginReply> GamePrepareLogin(
-            GamePrepareLoginRequest request,
-            ServerCallContext context)
+        return new GamePrepareLoginReply()
         {
-            var query = new GamePrepareLoginQuery(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.PlayerCode,
-                request.CurrencyCode);
+            Token = result
+        };
+    }
 
-            var result = await _gamePrepareLoginService
-                .GetAsync(
-                    query,
-                    context.CancellationToken)
-                .ConfigureAwait(false);
+    public override async Task<PlayerBalanceReply> PlayerBalance(
+        PlayerBalanceRequest request,
+        ServerCallContext context)
+    {
+        var query = new PlayerBalanceQuery(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.PlayerCode);
 
-            return new GamePrepareLoginReply()
-            {
-                Token = result
-            };
-        }
+        var result = await _playerBalanceService
+                        .GetAsync(
+                            query,
+                            context.CancellationToken)
+                        .ConfigureAwait(false);
 
-        public override async Task<PlayerBalanceReply> PlayerBalance(
-            PlayerBalanceRequest request,
-            ServerCallContext context)
+        return new PlayerBalanceReply()
         {
-            var query = new PlayerBalanceQuery(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.PlayerCode);
+            IsPlayer = result.IsPlayer,
+            Balance = result.Balance
+        };
+    }
 
-            var result = await _playerBalanceService
-                            .GetAsync(
-                                query,
-                                context.CancellationToken)
-                            .ConfigureAwait(false);
+    public override async Task<PlayerKickReply> PlayerKick(
+        PlayerKickRequest request,
+        ServerCallContext context)
+    {
+        var command = new PlayerKickCommand(
+            new(request.ApiUrl),
+            request.PartnerCode,
+            request.PartnerKey,
+            request.PartnerIv,
+            request.PlayerCode);
 
-            return new PlayerBalanceReply()
-            {
-                IsPlayer = result.IsPlayer,
-                Balance = result.Balance
-            };
-        }
+        await _playerKickLineService
+            .ExecuteAsync(
+                command,
+                context.CancellationToken)
+            .ConfigureAwait(false);
 
-        public override async Task<PlayerKickReply> PlayerKick(
-            PlayerKickRequest request,
-            ServerCallContext context)
+        return new PlayerKickReply()
         {
-            var command = new PlayerKickCommand(
-                new(request.ApiUrl),
-                request.PartnerCode,
-                request.PartnerKey,
-                request.PartnerIv,
-                request.PlayerCode);
-
-            await _playerKickLineService
-                .ExecuteAsync(
-                    command,
-                    context.CancellationToken)
-                .ConfigureAwait(false);
-
-            return new PlayerKickReply()
-            {
-                Success = true
-            };
-        }
+            Success = true
+        };
     }
 }

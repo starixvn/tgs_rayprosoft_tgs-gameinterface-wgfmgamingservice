@@ -4,6 +4,10 @@ namespace Tgs.GameInterface.WGFmGamingService.Client;
 
 public interface IGameInterfaceWGFmGamingClient
 {
+    ValueTask<string> CheckingServiceAsync(
+        string machineName,
+        CancellationToken cancellationToken = default);
+
     ValueTask FundInAsync(
         Uri apiUrl,
         string partnerCode,

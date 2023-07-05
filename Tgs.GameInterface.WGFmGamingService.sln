@@ -3,20 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項目", "{FA3A19D5-3C3F-46AB-BE34-D76EF07B742B}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		CodeMaid.config = CodeMaid.config
-		nuget.config = nuget.config
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService.Core", "Tgs.GameInterface.WGFmGamingService.Core\Tgs.GameInterface.WGFmGamingService.Core.csproj", "{085C8C3B-2365-4E3E-B815-7D21C5687D31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService", "Tgs.GameInterface.WGFmGamingService\Tgs.GameInterface.WGFmGamingService.csproj", "{1EE145FE-DAE6-48A1-B2EE-964A70869FFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService.Core.UnitTest", "Tgs.GameInterface.WGFmGamingService.Core.UnitTest\Tgs.GameInterface.WGFmGamingService.Core.UnitTest.csproj", "{9472CF3C-06E2-44B6-8480-69BE78FDB59E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameInterface.WGFmGamingService.Client", "Tgs.GameInterface.WGFmGamingService.Client\Tgs.GameInterface.WGFmGamingService.Client.csproj", "{F636B6B1-470B-423E-A43A-A4CCEB475494}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService.Client", "Tgs.GameInterface.WGFmGamingService.Client\Tgs.GameInterface.WGFmGamingService.Client.csproj", "{F636B6B1-470B-423E-A43A-A4CCEB475494}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
