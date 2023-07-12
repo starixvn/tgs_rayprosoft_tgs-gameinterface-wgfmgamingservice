@@ -4,16 +4,16 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<Version>0.0.5</Version>
+		<Version>0.0.6</Version>
 		<Authors>Raypro</Authors>
-		<Description>Tgs GameInterface WGFmGamingService Client</Description>
+		<RootNamespace>Tgs.GameInterface.WGFmGamingService.Client</RootNamespace>
+		<PackageId>Tgs.GameInterface.WGFmGamingService.Client</PackageId>
+		<Title>Tgs.GameInterface.WGFmGamingService.Client</Title>
+		<PackageTags>Tgs GameInterface WGFmGaming Client</PackageTags>
+		<Description>Tgs GameInterface WGFmGaming Client</Description>
 		<PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-gameinterface-wgfmgamingservice</PackageProjectUrl>
 		<RepositoryUrl>https://gitlab.com/rayprosoft/tgs-gameinterface-wgfmgamingservice.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Tgs GameInterface WGFmGamingService</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

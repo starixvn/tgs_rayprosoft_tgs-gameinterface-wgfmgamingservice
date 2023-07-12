@@ -3,6 +3,7 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Tgs.GameInterface.WGFmGamingService.Core.Exceptions;
+using Tgs.GameInterface.WGFmGamingService.Core.Extensions;
 using Tgs.GameInterface.WGFmGamingService.Core.Models;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core;

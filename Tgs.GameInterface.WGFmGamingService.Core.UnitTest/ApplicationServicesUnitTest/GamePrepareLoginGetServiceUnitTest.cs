@@ -3,10 +3,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesUnitTest;
 
-[TestClass]
 public class GamePrepareLoginGetServiceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var query = new GamePrepareLoginQuery(
@@ -40,7 +39,7 @@ public class GamePrepareLoginGetServiceUnitTest
                query)
            .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual(token, actual);
+        Assert.NotNull(actual);
+        Assert.Equal(token, actual);
     }
 }

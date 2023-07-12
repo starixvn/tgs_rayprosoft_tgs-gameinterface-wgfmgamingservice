@@ -1,4 +1,4 @@
-﻿namespace Tgs.GameInterface.WGFmGamingService.Core;
+﻿namespace Tgs.GameInterface.WGFmGamingService.Core.Extensions;
 
 public static class StringExtensions
 {

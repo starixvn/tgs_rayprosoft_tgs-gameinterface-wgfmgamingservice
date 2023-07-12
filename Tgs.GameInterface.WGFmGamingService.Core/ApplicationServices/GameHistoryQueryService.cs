@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Tgs.GameInterface.WGFmGamingService.Core.Extensions;
+using Tgs.GameInterface.WGFmGamingService.Core.Models;
 using Tgs.ServiceUtility;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
@@ -9,7 +11,6 @@ internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHis
 {
     private readonly ILogger<GameHistoryQueryService> _logger;
     private readonly IGameApiClient _client;
-    private readonly TimeZoneInfo _timeZone;
 
     public GameHistoryQueryService(
         ILogger<GameHistoryQueryService> logger,
@@ -17,7 +18,6 @@ internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHis
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _client = client ?? throw new ArgumentNullException(nameof(client));
-        _timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
     }
 
     public async IAsyncEnumerable<GameHistoryResult> QueryAsync(
@@ -25,16 +25,17 @@ internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHis
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var showBetInfos = await _client
-                    .ShowBetListAsync(
-                        query.ApiUrl,
-                        query.PartnerCode,
-                        query.PartnerKey,
-                        query.PartnerIV,
-                        query.IsSettle ? ShowBetListDateType.SettleDate : ShowBetListDateType.BetDate,
-                        query.StartTime,
-                        query.EndTime,
-                        cancellationToken)
-                    .ConfigureAwait(false);
+            .ShowBetListAsync(
+            apiUrl: query.ApiUrl,
+            partnerCode: query.PartnerCode,
+            partnerKey: query.PartnerKey,
+            partnerIV: query.PartnerIV,
+            dateType: query.IsSettle ? ShowBetListDateType.SettleDate : ShowBetListDateType.BetDate,
+            startTime: query.StartTime,
+            endTime: query.EndTime,
+            cancellationToken: cancellationToken)
+            .ConfigureAwait(false)
+            ?? Enumerable.Empty<ShowBetInfo>();
 
         if (!showBetInfos.Any())
         {
@@ -43,29 +44,47 @@ internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHis
 
         foreach (var showBetInfo in showBetInfos)
         {
-            if (showBetInfo.Reference.Contains("不接受", StringComparison.OrdinalIgnoreCase)
-                || showBetInfo.Reference.Contains("等待确认", StringComparison.OrdinalIgnoreCase))
+            if (
+                showBetInfo.Reference.Contains("不接受", StringComparison.OrdinalIgnoreCase) ||
+                showBetInfo.Reference.Contains("等待确认", StringComparison.OrdinalIgnoreCase) ||
+                showBetInfo.BetStatus.Contains("比分错误", StringComparison.OrdinalIgnoreCase) ||
+                showBetInfo.BetStatus.Contains("等待确认", StringComparison.OrdinalIgnoreCase))
             {
                 _logger.LogError("There is an abnormal bet.({showBetInfo})", JsonSerializer.Serialize(showBetInfo));
                 continue;
             }
-            var isClosed = !string.Equals(showBetInfo.InitData.Win, "0", StringComparison.OrdinalIgnoreCase);
-            var isVoid = !decimal.TryParse(showBetInfo.Result, out var playerWinLoss);
-            _ = decimal.TryParse(showBetInfo.InitData.BetAmount, out var bet);
-            var turnover = !isClosed || isVoid ? 0 : bet;
-            playerWinLoss = !isClosed || isVoid ? 0 : playerWinLoss;
-            var settle = !isClosed || isVoid ? 0 : bet + playerWinLoss;
-            var externalCreatedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
-            var externalClosedOn = (isClosed) ? new DateTimeOffset(DateTime.Parse(showBetInfo.SettleDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.SettleDate))).ToString("O") : string.Empty;
-
-            if (!isClosed && isVoid)
+            var isClosed = string.Equals(showBetInfo.InitData.Win, "1", StringComparison.OrdinalIgnoreCase);
+            var isVoid = false;
+            if (showBetInfo.BetStatus.Contains("不接受", StringComparison.OrdinalIgnoreCase) ||
+                showBetInfo.BetStatus.Contains("已拒绝", StringComparison.OrdinalIgnoreCase))
             {
-                externalClosedOn = new DateTimeOffset(DateTime.Parse(showBetInfo.RecordDate), _timeZone.GetUtcOffset(DateTime.Parse(showBetInfo.RecordDate))).ToString("O");
                 isClosed = true;
+                isVoid = true;
             }
+            var playerCode = showBetInfo.Username;
+            var externalRoundId = showBetInfo.Reference;
+            var externalCreatedOn = showBetInfo.RecordDate.StringConvertDateTimeOffset().ToString("O");
+            var externalClosedOn = isClosed
+                ? string.IsNullOrEmpty(showBetInfo.SettleDate)
+                    ? externalCreatedOn
+                    : showBetInfo.SettleDate.StringConvertDateTimeOffset().ToString("O")
+                : string.Empty;
+
+            var bet = Convert.ToDecimal(showBetInfo.InitData.BetAmount);
+            var turnover = 0.0m;
+            var settle = 0.0m;
+            var playerWinLoss = 0.0m;
+
+            if (isClosed && !isVoid)
+            {
+                turnover = bet;
+                playerWinLoss = Convert.ToDecimal(showBetInfo.Result);
+                settle = bet + playerWinLoss;
+            }
+
             yield return new GameHistoryResult(
-                PlayerCode: showBetInfo.Username,
-                ExternalRoundId: showBetInfo.Reference,
+                PlayerCode: playerCode,
+                ExternalRoundId: externalRoundId,
                 ExternalGameId: "1",
                 ExternalCreatedOn: externalCreatedOn,
                 ExternalClosedOn: externalClosedOn,

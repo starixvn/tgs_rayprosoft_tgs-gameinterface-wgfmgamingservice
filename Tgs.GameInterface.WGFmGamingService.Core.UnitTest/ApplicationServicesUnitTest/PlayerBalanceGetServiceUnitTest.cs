@@ -3,10 +3,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesUnitTest;
 
-[TestClass]
 public class PlayerBalanceGetServiceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var query = new PlayerBalanceQuery(
@@ -35,8 +34,8 @@ public class PlayerBalanceGetServiceUnitTest
                query)
            .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.IsPlayer);
-        Assert.AreEqual(1, actual.Balance);
+        Assert.NotNull(actual);
+        Assert.True(actual.IsPlayer);
+        Assert.Equal(1, actual.Balance);
     }
 }
