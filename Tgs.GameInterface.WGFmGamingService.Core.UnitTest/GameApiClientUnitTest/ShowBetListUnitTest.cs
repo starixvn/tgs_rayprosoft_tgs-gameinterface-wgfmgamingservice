@@ -7,10 +7,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.Models;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.GameApiClientUnitTest;
 
-[TestClass]
 public class ShowBetListUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process_BetDate()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -104,10 +103,10 @@ public class ShowBetListUnitTest
             endTime
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process_SettleDate()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -266,10 +265,10 @@ public class ShowBetListUnitTest
             endTime
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process_No_Data_Is_Null()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -327,10 +326,10 @@ public class ShowBetListUnitTest
             endTime
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process_No_Data()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -389,10 +388,10 @@ public class ShowBetListUnitTest
             endTime
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
+        Assert.NotNull(actual);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process_Void()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -485,8 +484,8 @@ public class ShowBetListUnitTest
             endTime
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.AreEqual("<br><span style='color: red'>已拒绝</span>", actual.Single().BetStatus);
-        Assert.AreEqual("<span style='color: red'>已拒绝</span>", actual.Single().Result);
+        Assert.NotNull(actual);
+        Assert.Equal("<br><span style='color: red'>已拒绝</span>", actual.Single().BetStatus);
+        Assert.Equal("<span style='color: red'>已拒绝</span>", actual.Single().Result);
     }
 }

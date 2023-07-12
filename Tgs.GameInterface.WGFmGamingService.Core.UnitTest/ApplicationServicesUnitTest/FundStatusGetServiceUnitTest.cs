@@ -3,10 +3,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesUnitTest;
 
-[TestClass]
 public class FundStatusGetServiceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var query = new FundStatusQuery(
@@ -35,7 +34,6 @@ public class FundStatusGetServiceUnitTest
                query)
            .ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual);
+        Assert.True(actual);
     }
 }

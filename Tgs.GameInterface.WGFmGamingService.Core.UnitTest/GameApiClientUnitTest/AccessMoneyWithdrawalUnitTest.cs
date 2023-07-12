@@ -7,10 +7,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.Models;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.GameApiClientUnitTest;
 
-[TestClass]
 public class AccessMoneyWithdrawalUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var apiUrl = new Uri("http://localhost:8088/");

@@ -7,10 +7,9 @@ using Tgs.GameInterface.WGFmGamingService.Core.Models;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.GameApiClientUnitTest;
 
-[TestClass]
 public class GetBalanceUnitTest
 {
-    [TestMethod]
+    [Fact]
     public async Task Normal_Process()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -48,7 +47,7 @@ public class GetBalanceUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        var actual = await client.GetBalanceAsync(
+        var (IsPlayer, Balance) = await client.GetBalanceAsync(
             apiUrl,
             partnerCode,
             partnerKey,
@@ -56,12 +55,11 @@ public class GetBalanceUnitTest
             playerCode
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsTrue(actual.IsPlayer);
-        Assert.AreEqual(decimal.Parse(response.Balance), actual.Balance);
+        Assert.True(IsPlayer);
+        Assert.Equal(decimal.Parse(response.Balance), Balance);
     }
 
-    [TestMethod]
+    [Fact]
     public async Task Player_Does_Not_Exist()
     {
         var apiUrl = new Uri("http://localhost:8088/");
@@ -97,7 +95,7 @@ public class GetBalanceUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        var actual = await client.GetBalanceAsync(
+        var (IsPlayer, _) = await client.GetBalanceAsync(
             apiUrl,
             partnerCode,
             partnerKey,
@@ -105,7 +103,6 @@ public class GetBalanceUnitTest
             playerCode
             ).ConfigureAwait(false);
 
-        Assert.IsNotNull(actual);
-        Assert.IsFalse(actual.IsPlayer);
+        Assert.False(IsPlayer);
     }
 }
