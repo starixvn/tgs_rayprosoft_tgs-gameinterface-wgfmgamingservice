@@ -48,12 +48,11 @@ public class GetBalanceUnitTest
             fakeAesCryptography);
 
         var (IsPlayer, Balance) = await client.GetBalanceAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            playerCode
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            playerCode: playerCode);
 
         Assert.True(IsPlayer);
         Assert.Equal(decimal.Parse(response.Balance), Balance);
@@ -100,8 +99,7 @@ public class GetBalanceUnitTest
             partnerCode,
             partnerKey,
             partnerIV,
-            playerCode
-            ).ConfigureAwait(false);
+            playerCode);
 
         Assert.False(IsPlayer);
     }

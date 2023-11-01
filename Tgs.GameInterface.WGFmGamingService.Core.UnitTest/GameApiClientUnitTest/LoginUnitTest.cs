@@ -41,11 +41,11 @@ public class LoginUnitTest
             fakeAesCryptography);
 
         var actual = await client.LoginAsync(
-            apiUrl,
-            partnerCode,
-            token,
-            lang,
-            version).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            token: token,
+            lang: lang,
+            version: version);
 
         Assert.NotNull(actual);
         Assert.Equal(new Uri("http://localhost:8088/"), actual);

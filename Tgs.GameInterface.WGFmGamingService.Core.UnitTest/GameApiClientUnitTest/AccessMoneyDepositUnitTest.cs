@@ -49,15 +49,13 @@ public class AccessMoneyDepositUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        await client
-            .AccessMoneyDepositAsync(
-                apiUrl,
-                partnerCode,
-                partnerKey,
-                partnerIV,
-                playerCode,
-                orderId,
-                amount)
-            .ConfigureAwait(false);
+        await client.AccessMoneyDepositAsync(
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            playerCode: playerCode,
+            orderId: orderId,
+            amount: amount);
     }
 }

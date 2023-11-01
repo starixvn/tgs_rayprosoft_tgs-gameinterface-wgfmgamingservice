@@ -49,15 +49,13 @@ public class AccessMoneyWithdrawalUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        await client
-            .AccessMoneyWithdrawalAsync(
-                apiUrl,
-                partnerCode,
-                partnerKey,
-                partnerIV,
-                playerCode,
-                orderId,
-                amount)
-            .ConfigureAwait(false);
+        await client.AccessMoneyWithdrawalAsync(
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            playerCode: playerCode,
+            orderId: orderId,
+            amount: amount);
     }
 }

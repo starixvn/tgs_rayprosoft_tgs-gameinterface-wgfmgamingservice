@@ -27,10 +27,7 @@ public class GameLoginGetServiceUnitTest
         var service = new GameLoginGetService(
             fakeGameApiClient);
 
-        var actual = await service
-           .GetAsync(
-               query)
-           .ConfigureAwait(false);
+        var actual = await service.GetAsync(query);
 
         Assert.NotNull(actual);
         Assert.Equal(new Uri("http://localhost:8088/"), actual);

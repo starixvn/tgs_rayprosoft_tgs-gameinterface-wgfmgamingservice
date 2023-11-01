@@ -47,14 +47,12 @@ public class AccessMoneyQueryUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        var actual = await client
-            .AccessMoneyQueryAsync(
-                apiUrl,
-                partnerCode,
-                partnerKey,
-                partnerIV,
-                orderId)
-            .ConfigureAwait(false);
+        var actual = await client.AccessMoneyQueryAsync(
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            orderId: orderId);
 
         Assert.True(actual);
     }

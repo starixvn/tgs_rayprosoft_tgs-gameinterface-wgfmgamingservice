@@ -47,13 +47,11 @@ public class LogoutUnitTest
             fakeHttpClient,
             fakeAesCryptography);
 
-        await client
-            .LogoutAsync(
-                apiUrl,
-                partnerCode,
-                partnerKey,
-                partnerIV,
-                playerCode)
-            .ConfigureAwait(false);
+        await client.LogoutAsync(
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            playerCode: playerCode);
     }
 }

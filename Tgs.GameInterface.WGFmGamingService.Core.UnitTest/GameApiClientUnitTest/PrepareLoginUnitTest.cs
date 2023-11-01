@@ -51,15 +51,14 @@ public class PrepareLoginUnitTest
             fakeAesCryptography);
 
         var actual = await client.PrepareLoginAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            timestamp,
-            playerCode,
-            playerCode,
-            currencyCode
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            timestamp: timestamp,
+            playerCode: playerCode,
+            playerNickname: playerCode,
+            currencyCode: currencyCode);
 
         Assert.NotNull(actual);
     }

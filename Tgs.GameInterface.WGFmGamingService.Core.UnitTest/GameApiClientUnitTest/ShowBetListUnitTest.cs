@@ -94,14 +94,13 @@ public class ShowBetListUnitTest
             fakeAesCryptography);
 
         var actual = await client.ShowBetListAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            dateType,
-            startTime,
-            endTime
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            dateType: dateType,
+            startTime: startTime,
+            endTime: endTime);
 
         Assert.NotNull(actual);
     }
@@ -256,14 +255,13 @@ public class ShowBetListUnitTest
             fakeAesCryptography);
 
         var actual = await client.ShowBetListAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            dateType,
-            startTime,
-            endTime
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            dateType: dateType,
+            startTime: startTime,
+            endTime: endTime);
 
         Assert.NotNull(actual);
     }
@@ -317,14 +315,13 @@ public class ShowBetListUnitTest
             fakeAesCryptography);
 
         var actual = await client.ShowBetListAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            dateType,
-            startTime,
-            endTime
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            dateType: dateType,
+            startTime: startTime,
+            endTime: endTime);
 
         Assert.NotNull(actual);
     }
@@ -379,14 +376,13 @@ public class ShowBetListUnitTest
             fakeAesCryptography);
 
         var actual = await client.ShowBetListAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            dateType,
-            startTime,
-            endTime
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            dateType: dateType,
+            startTime: startTime,
+            endTime: endTime);
 
         Assert.NotNull(actual);
     }
@@ -475,14 +471,13 @@ public class ShowBetListUnitTest
             fakeAesCryptography);
 
         var actual = await client.ShowBetListAsync(
-            apiUrl,
-            partnerCode,
-            partnerKey,
-            partnerIV,
-            dateType,
-            startTime,
-            endTime
-            ).ConfigureAwait(false);
+            apiUrl: apiUrl,
+            partnerCode: partnerCode,
+            partnerKey: partnerKey,
+            partnerIV: partnerIV,
+            dateType: dateType,
+            startTime: startTime,
+            endTime: endTime);
 
         Assert.NotNull(actual);
         Assert.Equal("<br><span style='color: red'>已拒绝</span>", actual.Single().BetStatus);

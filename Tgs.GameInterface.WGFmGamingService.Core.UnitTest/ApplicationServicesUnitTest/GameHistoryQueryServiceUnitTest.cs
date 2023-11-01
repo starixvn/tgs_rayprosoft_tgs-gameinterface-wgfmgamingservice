@@ -74,11 +74,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
+        var actual = await service.QueryAsync(
             query: query)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameHistoryResult>();
 
         Assert.NotNull(actual);
@@ -162,11 +160,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
+        var actual = await service.QueryAsync(
             query: query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -249,11 +245,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
+        var actual = await service.QueryAsync(
             query: query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -336,11 +330,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+        var actual = await service.QueryAsync(
+            query)
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -423,11 +415,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+        var actual = await service.QueryAsync(
+            query)
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -510,11 +500,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
+        var actual = await service.QueryAsync(
             query: query)
             .ToArrayAsync()
-            .ConfigureAwait(false)
             ?? Enumerable.Empty<GameHistoryResult>();
 
         Assert.NotNull(actual);
@@ -586,11 +574,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+        var actual = await service.QueryAsync(
+            query)
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());
@@ -661,11 +647,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+        var actual = await service.QueryAsync(
+            query)
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.True(actual.Any());
@@ -748,11 +732,9 @@ public class GameHistoryQueryServiceUnitTest
             fakeLog,
             fakeGameApiClient);
 
-        var actual = await service
-            .QueryAsync(
-                query)
-            .ToArrayAsync()
-            .ConfigureAwait(false);
+        var actual = await service.QueryAsync(
+            query)
+            .ToArrayAsync();
 
         Assert.NotNull(actual);
         Assert.False(actual.Any());

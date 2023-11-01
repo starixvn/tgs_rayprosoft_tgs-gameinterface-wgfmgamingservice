@@ -34,10 +34,7 @@ public class GamePrepareLoginGetServiceUnitTest
         var service = new GamePrepareLoginGetService(
             fakeGameApiClient);
 
-        var actual = await service
-           .GetAsync(
-               query)
-           .ConfigureAwait(false);
+        var actual = await service.GetAsync(query);
 
         Assert.NotNull(actual);
         Assert.Equal(token, actual);

@@ -32,9 +32,6 @@ public class FundOutCommandServiceUnitTest
         var service = new FundOutCommandService(
             fakeGameApiClient);
 
-        await service
-           .ExecuteAsync(
-               command)
-           .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
     }
 }

@@ -32,9 +32,6 @@ public class FundInCommandServiceUnitTest
         var service = new FundInCommandService(
             fakeGameApiClient);
 
-        await service
-           .ExecuteAsync(
-               command)
-           .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
     }
 }

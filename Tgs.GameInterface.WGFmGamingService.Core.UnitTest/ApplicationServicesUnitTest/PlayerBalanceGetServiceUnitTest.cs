@@ -29,10 +29,7 @@ public class PlayerBalanceGetServiceUnitTest
         var service = new PlayerBalanceGetService(
             fakeGameApiClient);
 
-        var actual = await service
-           .GetAsync(
-               query)
-           .ConfigureAwait(false);
+        var actual = await service.GetAsync(query);
 
         Assert.NotNull(actual);
         Assert.True(actual.IsPlayer);

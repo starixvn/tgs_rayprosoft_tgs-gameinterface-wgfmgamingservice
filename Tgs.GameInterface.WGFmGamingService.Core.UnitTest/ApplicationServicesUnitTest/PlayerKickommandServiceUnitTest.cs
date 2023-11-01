@@ -28,9 +28,6 @@ public class PlayerKickommandServiceUnitTest
         var service = new PlayerKickCommandService(
             fakeGameApiClient);
 
-        await service
-           .ExecuteAsync(
-               command)
-           .ConfigureAwait(false);
+        await service.ExecuteAsync(command);
     }
 }
