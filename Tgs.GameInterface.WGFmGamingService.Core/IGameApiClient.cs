@@ -56,6 +56,7 @@ public interface IGameApiClient
         string token,
         string lang,
         int version = 1,
+        int IsPhone = 0,
         CancellationToken cancellationToken = default);
 
     ValueTask<string> PrepareLoginAsync(

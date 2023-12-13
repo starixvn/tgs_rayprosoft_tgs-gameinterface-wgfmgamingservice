@@ -180,7 +180,8 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.PartnerCode,
             request.Token,
             request.Lang,
-            request.Version);
+            request.Version,
+            request.IsPhone);
 
         var result = await _gameLoginService
             .GetAsync(

@@ -52,6 +52,7 @@ public interface IGameInterfaceWGFmGamingClient
         string token,
         string lang,
         int version = 1,
+        bool isPhone = false,
         CancellationToken cancellationToken = default);
 
     ValueTask<string> GamePrepareLoginAsync(

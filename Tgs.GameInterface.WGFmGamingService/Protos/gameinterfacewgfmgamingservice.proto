@@ -71,6 +71,7 @@ message GameLoginRequest {
 	string token = 3;
 	string lang = 4;
 	int32 version = 5;
+	bool is_phone = 6;
 }
 
 message GameHistoryRequest {

@@ -17,10 +17,11 @@ public class LoginUnitTest
         var token = Guid.NewGuid().ToString("N");
         var lang = "0";
         var version = 1;
+        var isPhone = 0;
 
         var fakeAesCryptography = Substitute.For<IAesCryptography>();
 
-        var url = new Uri($"{apiUrl}?m=api&c=index&a=Login&Token={WebUtility.UrlEncode(token)}&PartnerCode={partnerCode}&Lang={lang}&Version={version}");
+        var url = new Uri($"{apiUrl}?m=api&c=index&a=Login&Token={WebUtility.UrlEncode(token)}&PartnerCode={partnerCode}&Lang={lang}&Version={version}&IsPhone={isPhone}");
 
         var response = new LoginResponse()
         {
@@ -45,7 +46,8 @@ public class LoginUnitTest
             partnerCode: partnerCode,
             token: token,
             lang: lang,
-            version: version);
+            version: version,
+            isPhone: isPhone);
 
         Assert.NotNull(actual);
         Assert.Equal(new Uri("http://localhost:8088/"), actual);

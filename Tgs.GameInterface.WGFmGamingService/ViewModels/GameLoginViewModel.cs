@@ -14,4 +14,6 @@ public record GameLoginViewModel
     public string Lang { get; init; } = default!;
 
     public int Version { get; init; } = 1;
+    [Required]
+    public bool IsPhone { get; init; } = false;
 }

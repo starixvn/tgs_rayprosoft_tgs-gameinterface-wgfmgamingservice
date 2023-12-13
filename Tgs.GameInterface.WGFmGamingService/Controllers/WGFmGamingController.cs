@@ -186,7 +186,8 @@ public class WGFmGamingController : ControllerBase
     ///             "partnerCode": "TA",
     ///             "token": "{token}",
     ///             "lang": "0",
-    ///             "version": 2
+    ///             "version": 2,
+    ///             "isPhone": false
     ///         }
     /// </remarks>
     [HttpPost("game/login")]
@@ -199,7 +200,8 @@ public class WGFmGamingController : ControllerBase
             source.PartnerCode,
             source.Token,
             source.Lang,
-            source.Version);
+            source.Version,
+            source.IsPhone);
 
         return service
             .GetAsync(

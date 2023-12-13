@@ -156,6 +156,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
         string token,
         string lang,
         int version = 1,
+        bool isPhone = false,
         CancellationToken cancellationToken = default)
     {
         var request = new GameLoginRequest()
@@ -164,7 +165,8 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             PartnerCode = partnerCode,
             Token = token,
             Lang = lang,
-            Version = version
+            Version = version,
+            IsPhone = isPhone,
         };
 
         var reply = await _client

@@ -5,4 +5,5 @@ public record GameLoginQuery(
     string PartnerCode,
     string Token,
     string Lang,
-    int Version = 1);
+    int Version = 1,
+    bool IsPhone = false);
