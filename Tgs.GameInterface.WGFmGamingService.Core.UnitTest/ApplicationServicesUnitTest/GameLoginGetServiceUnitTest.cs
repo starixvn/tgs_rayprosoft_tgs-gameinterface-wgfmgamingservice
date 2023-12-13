@@ -12,7 +12,9 @@ public class GameLoginGetServiceUnitTest
             new Uri("http://localhost:8088/"),
             "partnerCode",
             Guid.NewGuid().ToString("N"),
-            "0");
+            "0",
+            Version: 1,
+            IsPhone: true);
 
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
@@ -21,7 +23,9 @@ public class GameLoginGetServiceUnitTest
                     Arg.Is(query.ApiUrl),
                     Arg.Is(query.PartnerCode),
                     Arg.Is(query.Token),
-                    Arg.Is(query.Lang))
+                    Arg.Is(query.Lang),
+                    Arg.Is(query.Version),
+                    Arg.Is(1))
                 .Returns(new Uri("http://localhost:8088/"));
 
         var service = new GameLoginGetService(
