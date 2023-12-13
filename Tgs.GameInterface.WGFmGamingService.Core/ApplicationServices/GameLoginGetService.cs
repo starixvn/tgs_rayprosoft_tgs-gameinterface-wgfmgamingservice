@@ -20,6 +20,6 @@ public class GameLoginGetService : IGetService<GameLoginQuery, Uri>
             token: query.Token,
             lang: query.Lang,
             version: query.Version,
-            IsPhone: (query.IsPhone) ? 1 : 0,
+            IsPhone: 1,
             cancellationToken: cancellationToken);
 }

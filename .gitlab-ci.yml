@@ -81,7 +81,7 @@ push-docker-image:
     policy: pull
   script:
     #- dotnet build "Tgs.GameInterface.WGFmGamingService/Tgs.GameInterface.WGFmGamingService.csproj" -c $BuildConfiguration -t:ContainerBuild -p:DockerfileTag="$ImageName:$Tag" --no-restore
-    - dotnet publish "Tgs.GameCurrency" 
+    - dotnet publish "Tgs.GameInterface.WGFmGamingService" 
        --os linux --arch x64
        /t:PublishContainer
        -c $BuildConfiguration
