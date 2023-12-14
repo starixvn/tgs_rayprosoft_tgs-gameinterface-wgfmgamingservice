@@ -11,15 +11,13 @@ public class GameLoginGetService : IGetService<GameLoginQuery, Uri>
         _gameApiClient = gameApiClient ?? throw new ArgumentNullException(nameof(gameApiClient));
     }
 
-    public ValueTask<Uri> GetAsync(
-        GameLoginQuery query,
-        CancellationToken cancellationToken = default)
+    public ValueTask<Uri> GetAsync(GameLoginQuery query, CancellationToken cancellationToken = default)
         => _gameApiClient.LoginAsync(
             apiUrl: query.ApiUrl,
             partnerCode: query.PartnerCode,
             token: query.Token,
             lang: query.Lang,
             version: query.Version,
-            IsPhone: 1,
+            IsPhone: query.IsPhone ? 1 : 0,
             cancellationToken: cancellationToken);
 }
