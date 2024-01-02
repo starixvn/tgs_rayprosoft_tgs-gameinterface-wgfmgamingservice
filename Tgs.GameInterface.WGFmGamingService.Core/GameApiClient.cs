@@ -8,23 +8,12 @@ using Tgs.GameInterface.WGFmGamingService.Core.Models;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core;
 
-internal class GameApiClient : IGameApiClient
+internal class GameApiClient(
+    ILogger<GameApiClient> logger,
+    HttpClient client,
+    IAesCryptography aesCryptography) : IGameApiClient
 {
-    private readonly HttpClient _client;
-    private readonly IAesCryptography _aesCryptography;
-    private readonly ILogger<GameApiClient> _logger;
-    private readonly TimeZoneInfo _timeZone;
-
-    public GameApiClient(
-        ILogger<GameApiClient> logger,
-        HttpClient client,
-        IAesCryptography aesCryptography)
-    {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-        _aesCryptography = aesCryptography ?? throw new ArgumentNullException(nameof(aesCryptography));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
-    }
+    private readonly TimeZoneInfo _timeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
 
     public async ValueTask AccessMoneyWithdrawalAsync(
         Uri apiUrl,
@@ -38,7 +27,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = $"{playerCode}|{(int)AccessMoneyType.Withdrawal}|{orderId}|{amount}";
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -93,7 +82,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = $"{playerCode}|{(int)AccessMoneyType.Deposit}|{orderId}|{amount}";
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -145,7 +134,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = orderId;
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                         .GetAesEncryptAsync(
                             data,
                             partnerKey,
@@ -188,7 +177,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = playerCode;
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -237,7 +226,7 @@ internal class GameApiClient : IGameApiClient
 
         var data = $"|{dateType.Description()}|{startTimeEastern:yyyy-MM-dd HH:mm:ss}|{endTimeEastern:yyyy-MM-dd HH:mm:ss}";
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -328,7 +317,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = $"{timestamp}|{playerCode}|{playerNickname}|{currencyCode}";
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -376,7 +365,7 @@ internal class GameApiClient : IGameApiClient
     {
         var data = playerCode;
 
-        var dataEncrypt = await _aesCryptography
+        var dataEncrypt = await aesCryptography
                                 .GetAesEncryptAsync(
                                     data,
                                     partnerKey,
@@ -413,7 +402,7 @@ internal class GameApiClient : IGameApiClient
 
     private async ValueTask<TResult> GetAsync<TResult>(
         Uri url,
-        IDictionary<string, object> request,
+        Dictionary<string, object> request,
         CancellationToken cancellationToken = default)
     {
         _ = request.TryGetValue("a", out var action);
@@ -422,7 +411,7 @@ internal class GameApiClient : IGameApiClient
 
         var sw = Stopwatch.StartNew();
 
-        var httpResponseMessage = await _client
+        var httpResponseMessage = await client
             .GetAsync(
                 requestUri: url,
                 cancellationToken: cancellationToken)
@@ -454,7 +443,7 @@ internal class GameApiClient : IGameApiClient
             RecordedOn = DateTimeOffset.UtcNow
         };
 
-        _logger.LogInformation("{logEvent}", JsonSerializer.Serialize(logEvent));
+        logger.LogInformation("{logEvent}", JsonSerializer.Serialize(logEvent));
 
         _ = httpResponseMessage.EnsureSuccessStatusCode();
 

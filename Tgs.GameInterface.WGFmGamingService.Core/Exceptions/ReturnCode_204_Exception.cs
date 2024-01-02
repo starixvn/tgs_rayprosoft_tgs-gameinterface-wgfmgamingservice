@@ -1,8 +1,5 @@
 ﻿namespace Tgs.GameInterface.WGFmGamingService.Core.Exceptions;
 
-public class ReturnCode_204_Exception : Exception
+public class ReturnCode_204_Exception(string version) : Exception($"無效的 Version 參數({version})")
 {
-    public ReturnCode_204_Exception(string version) : base($"無效的 Version 參數({version})")
-    {
-    }
 }

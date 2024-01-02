@@ -5,44 +5,20 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameInterface.WGFmGamingService.GrpcServices;
 
-public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceBase
+public class WGFmGamingGrpcService(
+    ILogger<WGFmGamingGrpcService> logger,
+    ICommandService<FundInCommand> fundInService,
+    ICommandService<FundOutCommand> fundOutService,
+    IGetService<FundStatusQuery, bool> fundStatusService,
+    IQueryService<GameHistoryQuery, GameHistoryResult> gameHistoryService,
+    IGetService<GameLoginQuery, Uri> gameLoginService,
+    IGetService<GamePrepareLoginQuery, string> gamePrepareLoginService,
+    IGetService<PlayerBalanceQuery, PlayerBalanceResult> playerBalanceService,
+    ICommandService<PlayerKickCommand> playerKickLineService) : GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceBase
 {
-    private readonly ILogger<WGFmGamingGrpcService> _logger;
-    private readonly ICommandService<FundInCommand> _fundInService;
-    private readonly ICommandService<FundOutCommand> _fundOutService;
-    private readonly IGetService<FundStatusQuery, bool> _fundStatusService;
-    private readonly IQueryService<GameHistoryQuery, GameHistoryResult> _gameHistoryService;
-    private readonly IGetService<GameLoginQuery, Uri> _gameLoginService;
-    private readonly IGetService<GamePrepareLoginQuery, string> _gamePrepareLoginService;
-    private readonly IGetService<PlayerBalanceQuery, PlayerBalanceResult> _playerBalanceService;
-    private readonly ICommandService<PlayerKickCommand> _playerKickLineService;
-
-    public WGFmGamingGrpcService(
-        ILogger<WGFmGamingGrpcService> logger,
-        ICommandService<FundInCommand> fundInService,
-        ICommandService<FundOutCommand> fundOutService,
-        IGetService<FundStatusQuery, bool> fundStatusService,
-        IQueryService<GameHistoryQuery, GameHistoryResult> gameHistoryService,
-        IGetService<GameLoginQuery, Uri> gameLoginService,
-        IGetService<GamePrepareLoginQuery, string> gamePrepareLoginService,
-        IGetService<PlayerBalanceQuery, PlayerBalanceResult> playerBalanceService,
-        ICommandService<PlayerKickCommand> playerKickLineService
-        )
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _fundInService = fundInService ?? throw new ArgumentNullException(nameof(fundInService));
-        _fundOutService = fundOutService ?? throw new ArgumentNullException(nameof(fundOutService));
-        _fundStatusService = fundStatusService ?? throw new ArgumentNullException(nameof(fundStatusService));
-        _gameHistoryService = gameHistoryService ?? throw new ArgumentNullException(nameof(gameHistoryService));
-        _gameLoginService = gameLoginService ?? throw new ArgumentNullException(nameof(gameLoginService));
-        _gamePrepareLoginService = gamePrepareLoginService ?? throw new ArgumentNullException(nameof(gamePrepareLoginService));
-        _playerBalanceService = playerBalanceService ?? throw new ArgumentNullException(nameof(playerBalanceService));
-        _playerKickLineService = playerKickLineService ?? throw new ArgumentNullException(nameof(playerKickLineService));
-    }
-
     public override Task<CheckingServiceReply> CheckingService(CheckingServiceRequest request, ServerCallContext context)
     {
-        _logger.LogWarning("LogOn:{logOn} Message: Create a check connection.({machineName})", DateTime.Now.ToString("o"), request.MachineName);
+        logger.LogWarning("LogOn:{logOn} Message: Create a check connection.({machineName})", DateTime.Now.ToString("o"), request.MachineName);
 
         return Task.FromResult(new CheckingServiceReply
         {
@@ -63,7 +39,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.OrderId,
             request.Amount.ToDecimal()!.Value);
 
-        await _fundInService
+        await fundInService
              .ExecuteAsync(
                  command,
                  context.CancellationToken)
@@ -88,7 +64,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.OrderId,
             request.Amount.ToDecimal()!.Value);
 
-        await _fundOutService
+        await fundOutService
              .ExecuteAsync(
                  command,
                  context.CancellationToken)
@@ -111,7 +87,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.PartnerIv,
             request.OrderId);
 
-        var result = await _fundStatusService
+        var result = await fundStatusService
             .GetAsync(
                 query,
                 context.CancellationToken)
@@ -136,7 +112,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.StartTime.ToDateTimeOffset(),
             request.EndTime.ToDateTimeOffset());
 
-        var results = await _gameHistoryService
+        var results = await gameHistoryService
             .QueryAsync(
                 query,
                 context.CancellationToken)
@@ -145,7 +121,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
 
         var reply = new GameHistoryReply();
 
-        if (results.Any())
+        if (results.Length != 0)
         {
             foreach (var result in results)
             {
@@ -183,7 +159,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.Version,
             request.IsPhone);
 
-        var result = await _gameLoginService
+        var result = await gameLoginService
             .GetAsync(
                 query,
                 context.CancellationToken)
@@ -207,7 +183,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.PlayerCode,
             request.CurrencyCode);
 
-        var result = await _gamePrepareLoginService
+        var result = await gamePrepareLoginService
             .GetAsync(
                 query,
                 context.CancellationToken)
@@ -230,7 +206,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.PartnerIv,
             request.PlayerCode);
 
-        var result = await _playerBalanceService
+        var result = await playerBalanceService
                         .GetAsync(
                             query,
                             context.CancellationToken)
@@ -254,7 +230,7 @@ public class WGFmGamingGrpcService : GameInterfaceWGFmGamingService.GameInterfac
             request.PartnerIv,
             request.PlayerCode);
 
-        await _playerKickLineService
+        await playerKickLineService
             .ExecuteAsync(
                 command,
                 context.CancellationToken)

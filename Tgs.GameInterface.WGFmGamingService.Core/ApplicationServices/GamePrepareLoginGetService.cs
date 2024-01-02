@@ -2,19 +2,13 @@
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
-public class GamePrepareLoginGetService : IGetService<GamePrepareLoginQuery, string>
+public class GamePrepareLoginGetService(
+    IGameApiClient gameApiClient) : IGetService<GamePrepareLoginQuery, string>
 {
-    private readonly IGameApiClient _gameApiClient;
-
-    public GamePrepareLoginGetService(IGameApiClient gameApiClient)
-    {
-        _gameApiClient = gameApiClient ?? throw new ArgumentNullException(nameof(gameApiClient));
-    }
-
     public ValueTask<string> GetAsync(
         GamePrepareLoginQuery query,
         CancellationToken cancellationToken = default)
-        => _gameApiClient
+        => gameApiClient
             .PrepareLoginAsync(
                 query.ApiUrl,
                 query.PartnerCode,

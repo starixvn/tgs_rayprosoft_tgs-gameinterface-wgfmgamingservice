@@ -4,15 +4,9 @@ using Tgs.GameInterface.WGFmGamingService.Protos;
 
 namespace Tgs.GameInterface.WGFmGamingService.Client;
 
-internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
+internal class GameInterfaceWGFmGamingClient(
+    GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceClient client) : IGameInterfaceWGFmGamingClient
 {
-    private readonly GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceClient _client;
-
-    public GameInterfaceWGFmGamingClient(GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceClient client)
-    {
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-
     public async ValueTask<string> CheckingServiceAsync(
         string machineName,
         CancellationToken cancellationToken = default)
@@ -22,7 +16,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             MachineName = machineName,
         };
 
-        var reply = await _client
+        var reply = await client
             .CheckingServiceAsync(
                 request: request,
                 cancellationToken: cancellationToken)
@@ -52,7 +46,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             Amount = amount
         };
 
-        _ = await _client
+        _ = await client
              .FundInAsync(
                  request: request,
                  cancellationToken: cancellationToken)
@@ -80,7 +74,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             Amount = amount
         };
 
-        _ = await _client
+        _ = await client
              .FundOutAsync(
                  request: request,
                  cancellationToken: cancellationToken)
@@ -104,7 +98,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             OrderId = orderId
         };
 
-        var reply = await _client
+        var reply = await client
              .FundStatusAsync(
                  request: request,
                  cancellationToken: cancellationToken)
@@ -133,13 +127,13 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             StartTime = startTime.ToTimestamp(),
             EndTime = endTime.ToTimestamp()
         };
-        var reply = await _client
+        var reply = await client
              .GameHistoryAsync(
                  request: request,
                  cancellationToken: cancellationToken)
              .ConfigureAwait(false);
 
-        if (!reply.Items.Any())
+        if (reply.Items.Count == 0)
         {
             yield break;
         }
@@ -169,7 +163,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             IsPhone = isPhone,
         };
 
-        var reply = await _client
+        var reply = await client
              .GameLoginAsync(
                  request: request,
                  cancellationToken: cancellationToken)
@@ -197,7 +191,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             CurrencyCode = currencyCode
         };
 
-        var reply = await _client
+        var reply = await client
              .GamePrepareLoginAsync(
                  request: request,
                  cancellationToken: cancellationToken)
@@ -223,7 +217,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             PlayerCode = playerCode,
         };
 
-        var reply = await _client
+        var reply = await client
               .PlayerBalanceAsync(
                   request: request,
                   cancellationToken: cancellationToken)
@@ -249,7 +243,7 @@ internal class GameInterfaceWGFmGamingClient : IGameInterfaceWGFmGamingClient
             PlayerCode = playerCode,
         };
 
-        _ = await _client
+        _ = await client
             .PlayerKickAsync(
                 request: request,
                 cancellationToken: cancellationToken)

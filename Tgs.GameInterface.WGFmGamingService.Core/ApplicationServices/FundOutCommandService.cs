@@ -2,19 +2,13 @@
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
-internal class FundOutCommandService : ICommandService<FundOutCommand>
+internal class FundOutCommandService(
+    IGameApiClient gameApiClient) : ICommandService<FundOutCommand>
 {
-    private readonly IGameApiClient _gameApiClient;
-
-    public FundOutCommandService(IGameApiClient gameApiClient)
-    {
-        _gameApiClient = gameApiClient ?? throw new ArgumentNullException(nameof(gameApiClient));
-    }
-
     public ValueTask ExecuteAsync(
         FundOutCommand command,
         CancellationToken cancellationToken = default)
-        => _gameApiClient
+        => gameApiClient
             .AccessMoneyDepositAsync(
                 command.ApiUrl,
                 command.PartnerCode,

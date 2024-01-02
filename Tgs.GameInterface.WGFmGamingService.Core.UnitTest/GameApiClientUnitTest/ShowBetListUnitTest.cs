@@ -45,7 +45,7 @@ public class ShowBetListUnitTest
             TotalAmount = "50",
             TotalResult = "0",
             BetInfo = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId = "26673",
                     Username = "4ued4qr92gm0",
                     RecordDate = "2022-08-30 02:21:40",
@@ -140,7 +140,7 @@ public class ShowBetListUnitTest
             TotalAmount = "310",
             TotalResult = "120.64",
             BetInfo = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId = "35642",
                     Username = "4ufjeyz80v90",
                     RecordDate = "2022-08-25 02:46:20",
@@ -173,7 +173,7 @@ public class ShowBetListUnitTest
                         BetAmount = "50.00"
                     }
                 },
-                new ShowBetInfo() {
+                new() {
                     MemberId = "35642",
                     Username = "4ufjeyz80v90",
                     RecordDate = "2022-08-25 02:44:52",
@@ -206,7 +206,7 @@ public class ShowBetListUnitTest
                         BetAmount = "50.00"
                     }
                 },
-                new ShowBetInfo() {
+                new() {
                     MemberId = "55017",
                     Username = "sup6666api_sakjune66",
                     RecordDate = "2022-08-25 00:38:47",
@@ -422,7 +422,7 @@ public class ShowBetListUnitTest
             TotalAmount = "0",
             TotalResult = "0",
             BetInfo = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId ="59640",
                     Username= "4uiw4uixe35k",
                     RecordDate ="2023-04-26 21:14:21",

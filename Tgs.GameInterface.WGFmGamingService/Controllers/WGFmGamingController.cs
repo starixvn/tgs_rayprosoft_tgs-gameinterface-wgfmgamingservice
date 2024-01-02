@@ -327,7 +327,7 @@ public class WGFmGamingController : ControllerBase
             .ToArrayAsync()
             .ConfigureAwait(false);
 
-        if (!results.Any())
+        if (results.Length == 0)
         {
             yield break;
         }

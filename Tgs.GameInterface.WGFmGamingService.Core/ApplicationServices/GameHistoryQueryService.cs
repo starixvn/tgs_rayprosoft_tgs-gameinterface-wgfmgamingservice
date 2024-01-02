@@ -7,24 +7,15 @@ using Tgs.ServiceUtility;
 
 namespace Tgs.GameInterface.WGFmGamingService.Core.ApplicationServices;
 
-internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHistoryResult>
+internal class GameHistoryQueryService(
+    ILogger<GameHistoryQueryService> logger,
+    IGameApiClient client) : IQueryService<GameHistoryQuery, GameHistoryResult>
 {
-    private readonly ILogger<GameHistoryQueryService> _logger;
-    private readonly IGameApiClient _client;
-
-    public GameHistoryQueryService(
-        ILogger<GameHistoryQueryService> logger,
-        IGameApiClient client)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _client = client ?? throw new ArgumentNullException(nameof(client));
-    }
-
     public async IAsyncEnumerable<GameHistoryResult> QueryAsync(
         GameHistoryQuery query,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var showBetInfos = await _client
+        var showBetInfos = await client
             .ShowBetListAsync(
             apiUrl: query.ApiUrl,
             partnerCode: query.PartnerCode,
@@ -50,7 +41,7 @@ internal class GameHistoryQueryService : IQueryService<GameHistoryQuery, GameHis
                 showBetInfo.BetStatus.Contains("比分错误", StringComparison.OrdinalIgnoreCase) ||
                 showBetInfo.BetStatus.Contains("等待确认", StringComparison.OrdinalIgnoreCase))
             {
-                _logger.LogError("There is an abnormal bet.({showBetInfo})", JsonSerializer.Serialize(showBetInfo));
+                logger.LogError("There is an abnormal bet.({showBetInfo})", JsonSerializer.Serialize(showBetInfo));
                 continue;
             }
             var isClosed = string.Equals(showBetInfo.InitData.Win, "1", StringComparison.OrdinalIgnoreCase);

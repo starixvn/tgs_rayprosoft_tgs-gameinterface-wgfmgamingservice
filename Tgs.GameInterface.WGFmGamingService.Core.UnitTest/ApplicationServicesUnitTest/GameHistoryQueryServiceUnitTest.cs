@@ -23,7 +23,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-            new ShowBetInfo() {
+            new() {
                 MemberId = "35642",
                 Username = "4ufjeyz80v90",
                 RecordDate = "2022-08-25 02:44:52",
@@ -110,7 +110,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId = "35642",
                     Username = "4ufjeyz80v90",
                     RecordDate = "2022-08-25 02:46:20",
@@ -165,7 +165,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.True(actual.Any());
+        Assert.NotEmpty(actual);
         Assert.Equal("4ufjeyz80v90", actual.First().PlayerCode);
         Assert.Equal("3082562817", actual.First().ExternalRoundId);
         Assert.True(actual.First().IsClosed);
@@ -195,7 +195,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-            new ShowBetInfo() {
+            new() {
                 MemberId = "55017",
                 Username = "4ufjeyz80v90",
                 RecordDate = "2022-08-25 00:38:47",
@@ -250,7 +250,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.True(actual.Any());
+        Assert.NotEmpty(actual);
         Assert.Equal("4ufjeyz80v90", actual.First().PlayerCode);
         Assert.Equal("6082524611", actual.First().ExternalRoundId);
         Assert.True(actual.First().IsClosed);
@@ -280,7 +280,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId ="65809",
                     Username= "4ukcrrmd6683",
                     RecordDate ="2023-07-10 22:34:33",
@@ -335,7 +335,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.True(actual.Any());
+        Assert.NotEmpty(actual);
         Assert.Equal("4ukcrrmd6683", actual.First().PlayerCode);
         Assert.Equal("5071046073", actual.First().ExternalRoundId);
         Assert.True(actual.First().IsClosed);
@@ -365,7 +365,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId = "26673",
                     Username = "4ued4qr92gm0",
                     RecordDate = "2022-08-30 02:21:40",
@@ -420,7 +420,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.True(actual.Any());
+        Assert.NotEmpty(actual);
         Assert.Equal("4ued4qr92gm0", actual.First().PlayerCode);
         Assert.Equal("4083093533", actual.First().ExternalRoundId);
         Assert.False(actual.First().IsClosed);
@@ -450,7 +450,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-            new ShowBetInfo() {
+            new() {
                 MemberId ="29509",
                 Username= "4ueycx9cqj55",
                 RecordDate ="2021-12-04 10:39:53",
@@ -524,7 +524,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId ="29509",
                     Username= "4ueycx9cqj55",
                     RecordDate ="2021-12-04 10:39:53",
@@ -579,7 +579,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.False(actual.Any());
+        Assert.Empty(actual);
     }
 
     [Fact]
@@ -597,7 +597,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId ="59640",
                     Username= "4uiw4uixe35k",
                     RecordDate ="2023-04-26 21:14:21",
@@ -652,7 +652,7 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.True(actual.Any());
+        Assert.NotEmpty(actual);
         Assert.Equal("4uiw4uixe35k", actual.First().PlayerCode);
         Assert.Equal("6042636087", actual.First().ExternalRoundId);
         Assert.True(actual.First().IsClosed);
@@ -682,7 +682,7 @@ public class GameHistoryQueryServiceUnitTest
         var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
         var showBetInfos = new ShowBetInfo[] {
-                new ShowBetInfo() {
+                new() {
                     MemberId ="65809",
                     Username= "4ukcrrmd6683",
                     RecordDate ="2023-07-06 13:28:59",
@@ -737,6 +737,6 @@ public class GameHistoryQueryServiceUnitTest
             .ToArrayAsync();
 
         Assert.NotNull(actual);
-        Assert.False(actual.Any());
+        Assert.Empty(actual);
     }
 }
