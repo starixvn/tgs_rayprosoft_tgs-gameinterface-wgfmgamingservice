@@ -2,13 +2,13 @@
 
 public enum AccessMoneyType
 {
-    /// <summary>
-    /// The deposit
-    /// </summary>
-    Deposit = 1,
+	/// <summary>
+	/// The deposit
+	/// </summary>
+	Deposit = 1,
 
-    /// <summary>
-    /// The withdrawal
-    /// </summary>
-    Withdrawal = 2
+	/// <summary>
+	/// The withdrawal
+	/// </summary>
+	Withdrawal = 2
 }

@@ -5,34 +5,34 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesU
 
 public class PlayerBalanceGetServiceUnitTest
 {
-    [Fact]
-    public async Task Normal_Process()
-    {
-        var query = new PlayerBalanceQuery(
-            new Uri("http://localhost:8088/"),
-            "partnerCode",
-            "partnerKey",
-            "partnerIV",
-            "test");
+	[Fact]
+	public async Task Normal_Process()
+	{
+		var query = new PlayerBalanceQuery(
+			new Uri("http://localhost:8088/"),
+			"partnerCode",
+			"partnerKey",
+			"partnerIV",
+			"test");
 
-        var fakeGameApiClient = Substitute.For<IGameApiClient>();
+		var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
-        _ = fakeGameApiClient
-                .GetBalanceAsync(
-                    Arg.Is(query.ApiUrl),
-                    Arg.Is(query.PartnerCode),
-                    Arg.Is(query.PartnerKey),
-                    Arg.Is(query.PartnerIV),
-                    Arg.Is(query.PlayerCode))
-                .Returns((true, 1));
+		_ = fakeGameApiClient
+				.GetBalanceAsync(
+					Arg.Is(query.ApiUrl),
+					Arg.Is(query.PartnerCode),
+					Arg.Is(query.PartnerKey),
+					Arg.Is(query.PartnerIV),
+					Arg.Is(query.PlayerCode))
+				.Returns((true, 1));
 
-        var service = new PlayerBalanceGetService(
-            fakeGameApiClient);
+		var service = new PlayerBalanceGetService(
+			fakeGameApiClient);
 
-        var actual = await service.GetAsync(query);
+		var actual = await service.GetAsync(query);
 
-        Assert.NotNull(actual);
-        Assert.True(actual.IsPlayer);
-        Assert.Equal(1, actual.Balance);
-    }
+		Assert.NotNull(actual);
+		Assert.True(actual.IsPlayer);
+		Assert.Equal(1, actual.Balance);
+	}
 }

@@ -9,53 +9,53 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.GameApiClientUnitTes
 
 public class AccessMoneyDepositUnitTest
 {
-    [Fact]
-    public async Task Normal_Process()
-    {
-        var apiUrl = new Uri("http://localhost:8088/");
-        var partnerCode = "partnerCode";
-        var partnerKey = "partnerKey";
-        var partnerIV = "partnerIV";
-        var playerCode = "playerCode";
-        var orderId = Guid.NewGuid().ToString("N");
-        var amount = 1;
+	[Fact]
+	public async Task Normal_Process()
+	{
+		var apiUrl = new Uri("http://localhost:8088/");
+		var partnerCode = "partnerCode";
+		var partnerKey = "partnerKey";
+		var partnerIV = "partnerIV";
+		var playerCode = "playerCode";
+		var orderId = Guid.NewGuid().ToString("N");
+		var amount = 1;
 
-        var fakeAesCryptography = Substitute.For<IAesCryptography>();
+		var fakeAesCryptography = Substitute.For<IAesCryptography>();
 
-        var dataEncrypt = Guid.NewGuid().ToString("N");
-        var data = $"{playerCode}|{(int)AccessMoneyType.Deposit}|{orderId}|{amount}";
+		var dataEncrypt = Guid.NewGuid().ToString("N");
+		var data = $"{playerCode}|{(int)AccessMoneyType.Deposit}|{orderId}|{amount}";
 
-        _ = fakeAesCryptography.GetAesEncryptAsync(
-            Arg.Is(data),
-            Arg.Is(partnerKey),
-            Arg.Is(partnerIV)).Returns(dataEncrypt);
+		_ = fakeAesCryptography.GetAesEncryptAsync(
+			Arg.Is(data),
+			Arg.Is(partnerKey),
+			Arg.Is(partnerIV)).Returns(dataEncrypt);
 
-        var url = new Uri($"{apiUrl}?m=api&c=index&a=AccessMoney&Hash={dataEncrypt}&PartnerCode={partnerCode}");
+		var url = new Uri($"{apiUrl}?m=api&c=index&a=AccessMoney&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
-        var response = new ReturnCodeResponse()
-        {
-            ReturnCode = 1
-        };
-        var content = JsonSerializer.Serialize(response);
-        var handler = new MockHttpMessageHandler();
-        _ = handler.Expect(HttpMethod.Get, url.ToString())
-                        .Respond(HttpStatusCode.OK, new StringContent(content));
+		var response = new ReturnCodeResponse()
+		{
+			ReturnCode = 1
+		};
+		var content = JsonSerializer.Serialize(response);
+		var handler = new MockHttpMessageHandler();
+		_ = handler.Expect(HttpMethod.Get, url.ToString())
+						.Respond(HttpStatusCode.OK, new StringContent(content));
 
-        var fakeHttpClient = handler.ToHttpClient();
-        var fakeLog = NullLogger<GameApiClient>.Instance;
+		var fakeHttpClient = handler.ToHttpClient();
+		var fakeLog = NullLogger<GameApiClient>.Instance;
 
-        var client = new GameApiClient(
-            fakeLog,
-            fakeHttpClient,
-            fakeAesCryptography);
+		var client = new GameApiClient(
+			fakeLog,
+			fakeHttpClient,
+			fakeAesCryptography);
 
-        await client.AccessMoneyDepositAsync(
-            apiUrl: apiUrl,
-            partnerCode: partnerCode,
-            partnerKey: partnerKey,
-            partnerIV: partnerIV,
-            playerCode: playerCode,
-            orderId: orderId,
-            amount: amount);
-    }
+		await client.AccessMoneyDepositAsync(
+			apiUrl: apiUrl,
+			partnerCode: partnerCode,
+			partnerKey: partnerKey,
+			partnerIV: partnerIV,
+			playerCode: playerCode,
+			orderId: orderId,
+			amount: amount);
+	}
 }

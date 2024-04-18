@@ -4,15 +4,15 @@ namespace Tgs.GameInterface.WGFmGamingService.Core;
 
 public enum ShowBetListDateType
 {
-    /// <summary>
-    /// 下注时间
-    /// </summary>
-    [Description("bet_date")]
-    BetDate,
+	/// <summary>
+	/// 下注时间
+	/// </summary>
+	[Description("bet_date")]
+	BetDate,
 
-    /// <summary>
-    /// 结算时间
-    /// </summary>
-    [Description("settle_date")]
-    SettleDate
+	/// <summary>
+	/// 结算时间
+	/// </summary>
+	[Description("settle_date")]
+	SettleDate
 }

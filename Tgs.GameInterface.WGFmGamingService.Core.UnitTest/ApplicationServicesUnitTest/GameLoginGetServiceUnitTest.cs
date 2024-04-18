@@ -5,35 +5,35 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesU
 
 public class GameLoginGetServiceUnitTest
 {
-    [Fact]
-    public async Task Normal_Process()
-    {
-        var query = new GameLoginQuery(
-            new Uri("http://localhost:8088/"),
-            "partnerCode",
-            Guid.NewGuid().ToString("N"),
-            "0",
-            Version: 1,
-            IsPhone: true);
+	[Fact]
+	public async Task Normal_Process()
+	{
+		var query = new GameLoginQuery(
+			new Uri("http://localhost:8088/"),
+			"partnerCode",
+			Guid.NewGuid().ToString("N"),
+			"0",
+			Version: 1,
+			IsPhone: true);
 
-        var fakeGameApiClient = Substitute.For<IGameApiClient>();
+		var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
-        _ = fakeGameApiClient
-                .LoginAsync(
-                    Arg.Is(query.ApiUrl),
-                    Arg.Is(query.PartnerCode),
-                    Arg.Is(query.Token),
-                    Arg.Is(query.Lang),
-                    Arg.Is(query.Version),
-                    Arg.Is(1))
-                .Returns(new Uri("http://localhost:8088/"));
+		_ = fakeGameApiClient
+				.LoginAsync(
+					Arg.Is(query.ApiUrl),
+					Arg.Is(query.PartnerCode),
+					Arg.Is(query.Token),
+					Arg.Is(query.Lang),
+					Arg.Is(query.Version),
+					Arg.Is(1))
+				.Returns(new Uri("http://localhost:8088/"));
 
-        var service = new GameLoginGetService(
-            fakeGameApiClient);
+		var service = new GameLoginGetService(
+			fakeGameApiClient);
 
-        var actual = await service.GetAsync(query);
+		var actual = await service.GetAsync(query);
 
-        Assert.NotNull(actual);
-        Assert.Equal(new Uri("http://localhost:8088/"), actual);
-    }
+		Assert.NotNull(actual);
+		Assert.Equal(new Uri("http://localhost:8088/"), actual);
+	}
 }

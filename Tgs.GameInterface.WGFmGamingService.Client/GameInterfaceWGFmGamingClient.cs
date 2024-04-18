@@ -5,248 +5,248 @@ using Tgs.GameInterface.WGFmGamingService.Protos;
 namespace Tgs.GameInterface.WGFmGamingService.Client;
 
 internal class GameInterfaceWGFmGamingClient(
-    GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceClient client) : IGameInterfaceWGFmGamingClient
+	GameInterfaceWGFmGamingService.GameInterfaceWGFmGamingServiceClient client) : IGameInterfaceWGFmGamingClient
 {
-    public async ValueTask<string> CheckingServiceAsync(
-        string machineName,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new CheckingServiceRequest
-        {
-            MachineName = machineName,
-        };
+	public async ValueTask<string> CheckingServiceAsync(
+		string machineName,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new CheckingServiceRequest
+		{
+			MachineName = machineName,
+		};
 
-        var reply = await client
-            .CheckingServiceAsync(
-                request: request,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
+		var reply = await client
+			.CheckingServiceAsync(
+				request: request,
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
 
-        return reply.MachineName;
-    }
+		return reply.MachineName;
+	}
 
-    public async ValueTask FundInAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string playerCode,
-        string orderId,
-        decimal amount,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new FundRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            PlayerCode = playerCode,
-            OrderId = orderId,
-            Amount = amount
-        };
+	public async ValueTask FundInAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string playerCode,
+		string orderId,
+		decimal amount,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new FundRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			PlayerCode = playerCode,
+			OrderId = orderId,
+			Amount = amount
+		};
 
-        _ = await client
-             .FundInAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
-    }
+		_ = await client
+			 .FundInAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
+	}
 
-    public async ValueTask FundOutAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string playerCode,
-        string orderId,
-        decimal amount,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new FundRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            PlayerCode = playerCode,
-            OrderId = orderId,
-            Amount = amount
-        };
+	public async ValueTask FundOutAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string playerCode,
+		string orderId,
+		decimal amount,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new FundRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			PlayerCode = playerCode,
+			OrderId = orderId,
+			Amount = amount
+		};
 
-        _ = await client
-             .FundOutAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
-    }
+		_ = await client
+			 .FundOutAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
+	}
 
-    public async ValueTask<bool> FundStatusAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string orderId,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new FundStatusRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            OrderId = orderId
-        };
+	public async ValueTask<bool> FundStatusAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string orderId,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new FundStatusRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			OrderId = orderId
+		};
 
-        var reply = await client
-             .FundStatusAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
+		var reply = await client
+			 .FundStatusAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
 
-        return reply.Success;
-    }
+		return reply.Success;
+	}
 
-    public async IAsyncEnumerable<GameHistoryInfo> GameHistoryAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        bool isSettle,
-        DateTimeOffset startTime,
-        DateTimeOffset endTime,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        var request = new GameHistoryRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            IsSettle = isSettle,
-            StartTime = startTime.ToTimestamp(),
-            EndTime = endTime.ToTimestamp()
-        };
-        var reply = await client
-             .GameHistoryAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
+	public async IAsyncEnumerable<GameHistoryInfo> GameHistoryAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		bool isSettle,
+		DateTimeOffset startTime,
+		DateTimeOffset endTime,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		var request = new GameHistoryRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			IsSettle = isSettle,
+			StartTime = startTime.ToTimestamp(),
+			EndTime = endTime.ToTimestamp()
+		};
+		var reply = await client
+			 .GameHistoryAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
 
-        if (reply.Items.Count == 0)
-        {
-            yield break;
-        }
+		if (reply.Items.Count == 0)
+		{
+			yield break;
+		}
 
-        foreach (var item in reply.Items)
-        {
-            yield return item;
-        }
-    }
+		foreach (var item in reply.Items)
+		{
+			yield return item;
+		}
+	}
 
-    public async ValueTask<Uri> GameLoginAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string token,
-        string lang,
-        int version = 1,
-        bool isPhone = false,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new GameLoginRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            Token = token,
-            Lang = lang,
-            Version = version,
-            IsPhone = isPhone,
-        };
+	public async ValueTask<Uri> GameLoginAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string token,
+		string lang,
+		int version = 1,
+		bool isPhone = false,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new GameLoginRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			Token = token,
+			Lang = lang,
+			Version = version,
+			IsPhone = isPhone,
+		};
 
-        var reply = await client
-             .GameLoginAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
+		var reply = await client
+			 .GameLoginAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
 
-        return new Uri(reply.GameUrl);
-    }
+		return new Uri(reply.GameUrl);
+	}
 
-    public async ValueTask<string> GamePrepareLoginAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string playerCode,
-        string currencyCode,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new GamePrepareLoginRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            PlayerCode = playerCode,
-            CurrencyCode = currencyCode
-        };
+	public async ValueTask<string> GamePrepareLoginAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string playerCode,
+		string currencyCode,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new GamePrepareLoginRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			PlayerCode = playerCode,
+			CurrencyCode = currencyCode
+		};
 
-        var reply = await client
-             .GamePrepareLoginAsync(
-                 request: request,
-                 cancellationToken: cancellationToken)
-             .ConfigureAwait(false);
+		var reply = await client
+			 .GamePrepareLoginAsync(
+				 request: request,
+				 cancellationToken: cancellationToken)
+			 .ConfigureAwait(false);
 
-        return reply.Token;
-    }
+		return reply.Token;
+	}
 
-    public async ValueTask<(bool IsPlayer, decimal Balance)> PlayerBalanceAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string playerCode,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new PlayerBalanceRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            PlayerCode = playerCode,
-        };
+	public async ValueTask<(bool IsPlayer, decimal Balance)> PlayerBalanceAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string playerCode,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new PlayerBalanceRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			PlayerCode = playerCode,
+		};
 
-        var reply = await client
-              .PlayerBalanceAsync(
-                  request: request,
-                  cancellationToken: cancellationToken)
-              .ConfigureAwait(false);
+		var reply = await client
+			  .PlayerBalanceAsync(
+				  request: request,
+				  cancellationToken: cancellationToken)
+			  .ConfigureAwait(false);
 
-        return (reply.IsPlayer, reply.Balance);
-    }
+		return (reply.IsPlayer, reply.Balance);
+	}
 
-    public async ValueTask PlayerKickAsync(
-        Uri apiUrl,
-        string partnerCode,
-        string partnerKey,
-        string partnerIV,
-        string playerCode,
-        CancellationToken cancellationToken = default)
-    {
-        var request = new PlayerKickRequest()
-        {
-            ApiUrl = apiUrl.ToString(),
-            PartnerCode = partnerCode,
-            PartnerKey = partnerKey,
-            PartnerIv = partnerIV,
-            PlayerCode = playerCode,
-        };
+	public async ValueTask PlayerKickAsync(
+		Uri apiUrl,
+		string partnerCode,
+		string partnerKey,
+		string partnerIV,
+		string playerCode,
+		CancellationToken cancellationToken = default)
+	{
+		var request = new PlayerKickRequest()
+		{
+			ApiUrl = apiUrl.ToString(),
+			PartnerCode = partnerCode,
+			PartnerKey = partnerKey,
+			PartnerIv = partnerIV,
+			PlayerCode = playerCode,
+		};
 
-        _ = await client
-            .PlayerKickAsync(
-                request: request,
-                cancellationToken: cancellationToken)
-            .ConfigureAwait(false);
-    }
+		_ = await client
+			.PlayerKickAsync(
+				request: request,
+				cancellationToken: cancellationToken)
+			.ConfigureAwait(false);
+	}
 }

@@ -2,7 +2,7 @@
 
 public class ReturnCode_202_Exception : Exception
 {
-    public ReturnCode_202_Exception() : base("Token 內部數據異常")
-    {
-    }
+	public ReturnCode_202_Exception() : base("Token 內部數據異常")
+	{
+	}
 }

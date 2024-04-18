@@ -2,21 +2,22 @@
 
 public static class DateTimeExtensions
 {
-    private static readonly TimeZoneInfo _TimeZone;
+	private static readonly TimeZoneInfo _TimeZone;
 
-    static DateTimeExtensions()
-    {
-        _TimeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
-    }
+	static DateTimeExtensions()
+	{
+		_TimeZone = TimeZoneInfo.CreateCustomTimeZone(id: "eastern time", baseUtcOffset: TimeSpan.FromHours(-4), "eastern time", "eastern time");
+	}
 
-    public static DateTimeOffset StringConvertDateTimeOffset(this string str)
-    {
-        if (string.IsNullOrEmpty(str))
-        {
-            return DateTime.UnixEpoch;
-        }
-        var date = DateTime.Parse(str);
+	public static DateTimeOffset StringConvertDateTimeOffset(this string str)
+	{
+		if (string.IsNullOrEmpty(str))
+		{
+			return DateTime.UnixEpoch;
+		}
 
-        return new DateTimeOffset(date, _TimeZone.GetUtcOffset(date));
-    }
+		var date = DateTime.Parse(str);
+
+		return new DateTimeOffset(date, _TimeZone.GetUtcOffset(date));
+	}
 }

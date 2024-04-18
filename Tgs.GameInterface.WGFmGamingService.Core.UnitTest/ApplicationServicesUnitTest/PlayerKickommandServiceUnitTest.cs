@@ -5,29 +5,29 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.ApplicationServicesU
 
 public class PlayerKickommandServiceUnitTest
 {
-    [Fact]
-    public async Task Normal_Process()
-    {
-        var command = new PlayerKickCommand(
-            new Uri("http://localhost:8088/"),
-            "partnerCode",
-            "partnerKey",
-            "partnerIV",
-            "test");
+	[Fact]
+	public async Task Normal_Process()
+	{
+		var command = new PlayerKickCommand(
+			new Uri("http://localhost:8088/"),
+			"partnerCode",
+			"partnerKey",
+			"partnerIV",
+			"test");
 
-        var fakeGameApiClient = Substitute.For<IGameApiClient>();
+		var fakeGameApiClient = Substitute.For<IGameApiClient>();
 
-        _ = fakeGameApiClient
-                .LogoutAsync(
-                    Arg.Is(command.ApiUrl),
-                    Arg.Is(command.PartnerCode),
-                    Arg.Is(command.PartnerKey),
-                    Arg.Is(command.PartnerIV),
-                    Arg.Is(command.PlayerCode));
+		_ = fakeGameApiClient
+				.LogoutAsync(
+					Arg.Is(command.ApiUrl),
+					Arg.Is(command.PartnerCode),
+					Arg.Is(command.PartnerKey),
+					Arg.Is(command.PartnerIV),
+					Arg.Is(command.PlayerCode));
 
-        var service = new PlayerKickCommandService(
-            fakeGameApiClient);
+		var service = new PlayerKickCommandService(
+			fakeGameApiClient);
 
-        await service.ExecuteAsync(command);
-    }
+		await service.ExecuteAsync(command);
+	}
 }

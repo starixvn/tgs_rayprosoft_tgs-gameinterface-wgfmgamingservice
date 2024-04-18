@@ -9,57 +9,57 @@ namespace Tgs.GameInterface.WGFmGamingService.Core.UnitTest.GameApiClientUnitTes
 
 public class PrepareLoginUnitTest
 {
-    [Fact]
-    public async Task Normal_Process()
-    {
-        var apiUrl = new Uri("http://localhost:8088/");
-        var partnerCode = "partnerCode";
-        var partnerKey = "partnerKey";
-        var partnerIV = "partnerIV";
-        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        var playerCode = "playerCode";
-        var currencyCode = "RMB";
+	[Fact]
+	public async Task Normal_Process()
+	{
+		var apiUrl = new Uri("http://localhost:8088/");
+		var partnerCode = "partnerCode";
+		var partnerKey = "partnerKey";
+		var partnerIV = "partnerIV";
+		var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+		var playerCode = "playerCode";
+		var currencyCode = "RMB";
 
-        var fakeAesCryptography = Substitute.For<IAesCryptography>();
+		var fakeAesCryptography = Substitute.For<IAesCryptography>();
 
-        var dataEncrypt = Guid.NewGuid().ToString("N");
-        var data = $"{timestamp}|{playerCode}|{playerCode}|{currencyCode}";
+		var dataEncrypt = Guid.NewGuid().ToString("N");
+		var data = $"{timestamp}|{playerCode}|{playerCode}|{currencyCode}";
 
-        _ = fakeAesCryptography.GetAesEncryptAsync(
-            Arg.Is(data),
-            Arg.Is(partnerKey),
-            Arg.Is(partnerIV)).Returns(dataEncrypt);
+		_ = fakeAesCryptography.GetAesEncryptAsync(
+			Arg.Is(data),
+			Arg.Is(partnerKey),
+			Arg.Is(partnerIV)).Returns(dataEncrypt);
 
-        var url = new Uri($"{apiUrl}?m=api&c=index&a=PrepareLogin&Hash={dataEncrypt}&PartnerCode={partnerCode}");
+		var url = new Uri($"{apiUrl}?m=api&c=index&a=PrepareLogin&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
-        var response = new PrepareLoginResponse()
-        {
-            ReturnCode = 1,
-            Token = Guid.NewGuid().ToString("N")
-        };
-        var content = JsonSerializer.Serialize(response);
-        var handler = new MockHttpMessageHandler();
-        _ = handler.Expect(HttpMethod.Get, url.ToString())
-                        .Respond(HttpStatusCode.OK, new StringContent(content));
+		var response = new PrepareLoginResponse()
+		{
+			ReturnCode = 1,
+			Token = Guid.NewGuid().ToString("N")
+		};
+		var content = JsonSerializer.Serialize(response);
+		var handler = new MockHttpMessageHandler();
+		_ = handler.Expect(HttpMethod.Get, url.ToString())
+						.Respond(HttpStatusCode.OK, new StringContent(content));
 
-        var fakeHttpClient = handler.ToHttpClient();
-        var fakeLog = NullLogger<GameApiClient>.Instance;
+		var fakeHttpClient = handler.ToHttpClient();
+		var fakeLog = NullLogger<GameApiClient>.Instance;
 
-        var client = new GameApiClient(
-            fakeLog,
-            fakeHttpClient,
-            fakeAesCryptography);
+		var client = new GameApiClient(
+			fakeLog,
+			fakeHttpClient,
+			fakeAesCryptography);
 
-        var actual = await client.PrepareLoginAsync(
-            apiUrl: apiUrl,
-            partnerCode: partnerCode,
-            partnerKey: partnerKey,
-            partnerIV: partnerIV,
-            timestamp: timestamp,
-            playerCode: playerCode,
-            playerNickname: playerCode,
-            currencyCode: currencyCode);
+		var actual = await client.PrepareLoginAsync(
+			apiUrl: apiUrl,
+			partnerCode: partnerCode,
+			partnerKey: partnerKey,
+			partnerIV: partnerIV,
+			timestamp: timestamp,
+			playerCode: playerCode,
+			playerNickname: playerCode,
+			currencyCode: currencyCode);
 
-        Assert.NotNull(actual);
-    }
+		Assert.NotNull(actual);
+	}
 }
