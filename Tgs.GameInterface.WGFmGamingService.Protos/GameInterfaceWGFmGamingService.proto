@@ -5,7 +5,7 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Tgs.GameInterface.WGFmGamingService.Protos";
 
-package gameinterfacewgfmgamingservice;
+package GameInterfaceWGFmGamingService;
 
 // The greeting service definition.
 service GameInterfaceWGFmGamingService {
