@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService.Client", "Tgs.GameInterface.WGFmGamingService.Client\Tgs.GameInterface.WGFmGamingService.Client.csproj", "{F636B6B1-470B-423E-A43A-A4CCEB475494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.GameInterface.WGFmGamingService.Protos", "Tgs.GameInterface.WGFmGamingService.Protos\Tgs.GameInterface.WGFmGamingService.Protos.csproj", "{C817A64D-A864-4E7F-9C59-72271E174B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.GameInterface.WGFmGamingService.Protos", "Tgs.GameInterface.WGFmGamingService.Protos\Tgs.GameInterface.WGFmGamingService.Protos.csproj", "{C817A64D-A864-4E7F-9C59-72271E174B57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
