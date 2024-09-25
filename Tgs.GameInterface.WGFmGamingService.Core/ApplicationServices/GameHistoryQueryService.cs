@@ -48,7 +48,8 @@ internal class GameHistoryQueryService(
 			var isClosed = string.Equals(showBetInfo.InitData.Win, "1", StringComparison.OrdinalIgnoreCase);
 			var isVoid = false;
 			if (showBetInfo.BetStatus.Contains("不接受", StringComparison.OrdinalIgnoreCase) ||
-				showBetInfo.BetStatus.Contains("已拒绝", StringComparison.OrdinalIgnoreCase))
+				showBetInfo.BetStatus.Contains("已拒绝", StringComparison.OrdinalIgnoreCase) ||
+				showBetInfo.BetStatus.Contains("注销", StringComparison.OrdinalIgnoreCase))
 			{
 				isClosed = true;
 				isVoid = true;
