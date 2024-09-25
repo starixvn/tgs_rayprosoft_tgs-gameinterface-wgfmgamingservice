@@ -27,13 +27,12 @@ internal class GameApiClient(
 	{
 		var data = $"{playerCode}|{(int)AccessMoneyType.Withdrawal}|{orderId}|{amount}";
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -46,9 +45,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=AccessMoney&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<ReturnCodeResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		if (response.ReturnCode is not 1)
 		{
@@ -82,13 +82,12 @@ internal class GameApiClient(
 	{
 		var data = $"{playerCode}|{(int)AccessMoneyType.Deposit}|{orderId}|{amount}";
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -101,9 +100,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=AccessMoney&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<ReturnCodeResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		if (response.ReturnCode is not 1)
 		{
@@ -134,13 +134,12 @@ internal class GameApiClient(
 	{
 		var data = orderId;
 
-		var dataEncrypt = await aesCryptography
-						.GetAesEncryptAsync(
-							data,
-							partnerKey,
-							partnerIV,
-							cancellationToken)
-						.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -153,9 +152,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=AccessMoneyQuery&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<ReturnCodeResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		return response.ReturnCode is not 1
 			? throw response.ReturnCode switch
@@ -177,13 +177,12 @@ internal class GameApiClient(
 	{
 		var data = playerCode;
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -196,9 +195,9 @@ internal class GameApiClient(
 		var url = new Uri(apiUrl, $"index.php?m=api&c=index&a=GetBalance&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<GetBalanceResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken).ConfigureAwait(false);
 
 		return response.ReturnCode is not 1 and not 602
 			? throw response.ReturnCode switch
@@ -226,13 +225,12 @@ internal class GameApiClient(
 
 		var data = $"|{dateType.Description()}|{startTimeEastern:yyyy-MM-dd HH:mm:ss}|{endTimeEastern:yyyy-MM-dd HH:mm:ss}";
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -245,9 +243,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=ShowBetList&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<ShowBetListResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		return response.ReturnCode is not 1
 			? throw response.ReturnCode switch
@@ -285,9 +284,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=Login&Token={WebUtility.UrlEncode(token)}&PartnerCode={partnerCode}&Lang={lang}&Version={version}&IsPhone={isPhone}");
 
 		var response = await GetAsync<LoginResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		return response.ReturnCode is not 1
 			? throw response.ReturnCode switch
@@ -317,13 +317,12 @@ internal class GameApiClient(
 	{
 		var data = $"{timestamp}|{playerCode}|{playerNickname}|{currencyCode}";
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -336,9 +335,9 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=PrepareLogin&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<PrepareLoginResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken).ConfigureAwait(false);
 
 		return response.ReturnCode is not 1
 			? throw response.ReturnCode switch
@@ -365,13 +364,12 @@ internal class GameApiClient(
 	{
 		var data = playerCode;
 
-		var dataEncrypt = await aesCryptography
-								.GetAesEncryptAsync(
-									data,
-									partnerKey,
-									partnerIV,
-									cancellationToken)
-								.ConfigureAwait(false);
+		var dataEncrypt = await aesCryptography.GetAesEncryptAsync(
+			data,
+			partnerKey,
+			partnerIV,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		var request = new Dictionary<string, object> {
 			{"m","api"},
@@ -384,9 +382,10 @@ internal class GameApiClient(
 		var url = new Uri($"{apiUrl}?m=api&c=index&a=Logout&Hash={dataEncrypt}&PartnerCode={partnerCode}");
 
 		var response = await GetAsync<ReturnCodeResponse>(
-						url,
-						request,
-						cancellationToken).ConfigureAwait(false);
+			url,
+			request,
+			cancellationToken)
+			.ConfigureAwait(false);
 
 		if (response.ReturnCode is not 1)
 		{

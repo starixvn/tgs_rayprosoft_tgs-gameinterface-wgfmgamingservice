@@ -739,4 +739,89 @@ public class GameHistoryQueryServiceUnitTest
 		Assert.NotNull(actual);
 		Assert.Empty(actual);
 	}
+
+	[Fact]
+	public async Task Win_Is_0_BetStatus_Is_LogOut()
+	{
+		var query = new GameHistoryQuery(
+			new Uri("http://localhost:8088/"),
+			"partnerCode",
+			"partnerKey",
+			"partnerIV",
+			true,
+			DateTimeOffset.Parse("2023-04-26T21:00:00+08:00"),
+			DateTimeOffset.Parse("2023-04-26T21:30:00+08:00"));
+		var fakeLog = NullLogger<GameHistoryQueryService>.Instance;
+		var fakeGameApiClient = Substitute.For<IGameApiClient>();
+
+		var showBetInfos = new ShowBetInfo[] {
+				new() {
+					MemberId ="88886",
+					Username= "4uny509kun2w",
+					RecordDate ="2024-09-21 10:17:31",
+					Reference = "8092137212",
+					SportType ="斯诺克/台球",
+					BetType ="(滚球)让球",
+					MatchName ="斯诺克-英国公开赛",
+					HomeName ="吴宜泽",
+					AwayName ="伊什普里特.查达",
+					BetContent = "斯诺克-英国公开赛<br>吴宜泽4.5伊什普里特.查达 (6:0)<br>伊什普里特.查达 @&nbsp; 1.310",
+					BetAmount ="<s>1,800.00</s>",
+					BetStatus = "<font  color='red'>注销</font>",
+					Result = "<font  color='red'>注销</font>",
+					ActiveAmount ="<s>1,800.00</s>",
+					ResultScore ="0:0/0:0/0:0/0:0/0:0/0:0/0:0/0:0",
+					SettleDate="2024-09-21 10:52:08",
+					BetIp ="182.239.121.230",
+					InitData = new ShowBetInfoInitData()
+					{
+						FB= "6",
+						Type= "live",
+						Content= "away@1.31@4.5",
+						Valid= "0",
+						LiveStatus= "1",
+						PlanNo= "1",
+						Part= "0",
+						Win= "1",
+						OddsType= "1",
+						MatchDate= "2024-09-21 08:00:00",
+						BetAmount="1,800.00"
+					}
+				}
+			};
+
+		_ = fakeGameApiClient
+				.ShowBetListAsync(
+					Arg.Is(query.ApiUrl),
+					Arg.Is(query.PartnerCode),
+					Arg.Is(query.PartnerKey),
+					Arg.Is(query.PartnerIV),
+					Arg.Is(ShowBetListDateType.SettleDate),
+					Arg.Is(query.StartTime),
+					Arg.Is(query.EndTime))
+				.Returns(showBetInfos);
+
+		var service = new GameHistoryQueryService(
+			fakeLog,
+			fakeGameApiClient);
+
+		var actual = await service.QueryAsync(
+			query)
+			.ToArrayAsync();
+
+		Assert.NotNull(actual);
+		Assert.NotEmpty(actual);
+		Assert.Equal("4uny509kun2w", actual.First().PlayerCode);
+		Assert.Equal("8092137212", actual.First().ExternalRoundId);
+		Assert.True(actual.First().IsClosed);
+		Assert.True(actual.First().IsVoid);
+		Assert.Equal(DateTimeOffset.Parse("2024-09-21T10:17:31-04:00").ToString("O"), actual.First().ExternalCreatedOn);
+		Assert.Equal(DateTimeOffset.Parse("2024-09-21T10:52:08-04:00").ToString("O"), actual.First().ExternalClosedOn);
+		Assert.Equal(1800.00m, actual.First().Bet);
+		Assert.Equal(1800.00m, actual.First().ValidBet);
+		Assert.Equal(0m, actual.First().Turnover);
+		Assert.Equal(0m, actual.First().PlayerWinLoss);
+		Assert.Equal(0m, actual.First().Settle);
+		Assert.Equal(JsonSerializer.Serialize(showBetInfos.First()), actual.First().AdditionalData);
+	}
 }
